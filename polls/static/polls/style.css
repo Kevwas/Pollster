@@ -1,0 +1,14 @@
+li a {
+    color: white;
+    font-weight: 600;
+    font-size: 25px;
+}
+
+body {
+    width: 500px;
+    height: 700px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #36926f url("images/background.gif") no-repeat;
+}
