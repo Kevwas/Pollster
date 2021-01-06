@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1 class="mb-5 text-center">{{ question.question_text }}</h1>
+<h1 class="mb-3 mt-5 text-light text-center">{{ question.question_text }}</h1>
+<p class="text-center mb-5" style="color: white"><strong>Published date: {{ question.pub_date }}</strong></p>
 
 <ul class="list-group mb-5">
 	{% for choice in question.choice_set.all %}
@@ -10,8 +11,79 @@
 	{% endfor %}
 </ul>
 
-<a class="btn btn-secondary" href="{% url 'polls:index' %}">Back To Polls</a>
-<a class="btn btn-dark" href="{% url 'polls:detail' question.id %}">Vote again?</a>
+<canvas id="myChart" style="padding: 30px; border-radius: 5px ;background-color: white; min-height: 300px; width: auto">
+</canvas>
+
+<div style="height: 30px"></div>
+
+<a class="btn btn-dark" href="{% url 'polls:polls' %}">Back To Polls</a>
+{% comment %} <a class="btn btn-dark" href="{% url 'polls:detail' question.id %}">Vote again?</a> {% endcomment %}
+
+<div style="height: 80px"></div>
+
+<script>
+  var state = {
+    'items': [],
+    'values': [],
+  }
+
+  var objId = "{{ question.id }}";
+
+  var dataURL = `/resultsData/${objId}/`;
+  $.ajax({
+    method: 'GET',
+    url: dataURL,
+    success: function(response){
+      console.log('RESPONSE:', response);
+      for (var i in response){
+        var key = Object.keys(response[i])[0];
+        var value = Object.values(response[i])[0];
+
+        state.items.push(key);
+        state.values.push(value)
+      }
+
+      console.log('STATE:', state)
+      buildChart(state.items, state.values)
+    }
+  })
+
+  function buildChart(labels, data){
+    colors = [];
+    for (var i in labels){
+      colors.push(`rgb(${(Math.floor(Math.random()*200)+100)
+            .toString()},${(Math.floor(Math.random()*200)+100)
+            .toString()},${(Math.floor(Math.random()*200)+100)
+            .toString()})`);
+    }
+    console.log(colors);
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myBarChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets:[{
+          label: 'Results',
+          data: data,
+          backgroundColor: colors,
+          // borderColor: 'black',
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+              callback: function(value) {if (value % 1 == 0) {return value;}},
+              reverse: false,
+            },
+          }]
+        }
+      }
+    });
+  }
+  
+</script>
 {% endblock %}
 
 {% comment %} <!DOCTYPE html>

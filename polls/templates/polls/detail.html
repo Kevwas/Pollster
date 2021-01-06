@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
-<a class="btn btn-secondary btn-sm mb-3" href="{% url 'polls:index' %}">Back To Polls</a>
-<h1 class="text-center mb-3">{{ question.question_text }}</h1>
+
+{% comment %} <a style="background-color: white" class="btn btn-sm mb-3 mt-5" href="{% url 'polls:polls' %}">Back To Polls</a> {% endcomment %}
+<h1 class="text-center mb-3 mt-5" style="color: white">{{ question.question_text }}</h1>
+<p class="text-center mb-3" style="color: white"><strong>Published date: {{ question.pub_date }}</strong></p>
 
 {% if error_message %}
 <p class="alert alert-danger">
@@ -9,7 +11,7 @@
 </p>
 {% endif %}
 
-<form action="{% url 'polls:vote' question.id %}" method="post">
+<form action="{% url 'polls:vote' question.id %}" style="padding: 10px" method="post">
 	{% csrf_token %} 
 	{% for choice in question.choice_set.all %}
 		<div class="form-check">
@@ -20,12 +22,21 @@
 				id="choice{{ forloop.counter }}"
 				value="{{ choice.id }}"
 			/>
-			<label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label
-			>
+			<label class="h5 text-light" for="choice{{ forloop.counter }}">
+        {{ choice.choice_text }}
+      </label>
 		</div>
 	{% endfor %}
-	<input type="submit" value="Vote" class="btn btn-success btn-lg btn-block mt-4" />
+	<input type="submit" value="Vote" class="btn btn-dark btn-lg btn-block mt-4" />
 </form>
+{% if question.description_text %}
+<div class="jumbotron jumbotron-fluid" style="margin-top: 20px; padding: 30px">
+  <div class="container">
+    <p class="lead">{{ question.description_text }}</p>
+  </div>
+</div>
+{% endif %}
+<div style="height: 60px"></div>
 {% endblock %}
 
 {% comment %} <!DOCTYPE html>

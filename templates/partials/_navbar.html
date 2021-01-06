@@ -1,0 +1,80 @@
+<style>
+	.navbar {
+		position : fixed;
+        top: 0;
+		width: 100%;
+		z-index: 999;
+		transition: top 0.3s;
+	}
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: #32adff">
+	<a class="navbar-brand text-light" href="/"
+		style="
+			background: #007bff;
+          	background: linear-gradient(to right, #3573c4, #33AEFF);
+			border: 1px solid black; 
+			padding: 7px;
+			border-radius: 7px;
+		"
+	>
+		<strong>POLLSTER</strong>
+	</a>
+  	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+  	  <span class="navbar-toggler-icon"></span>
+  	</button>
+
+	<div class="collapse navbar-collapse" id="navbarText">
+		{% if request.path != "/polls/" and request.user.is_authenticated %}
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active">
+					<a class="nav-link" href="{% url 'polls:polls' %}"><strong>Polls</strong> <span class="sr-only">(current)</span></a>
+				</li>
+			</ul>
+		{% endif %}
+		{% if not request.user.is_authenticated %}
+			{% if request.path == "/" %}
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="{% url 'accounts:login' %}"><strong>Login</strong></a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{% url 'accounts:register' %}"><strong>Register</strong></a>
+					</li>
+				</ul>
+			{% elif request.path == "/login/"%}
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="{% url 'accounts:register' %}"><strong>Register</strong></a>
+					</li>
+				</ul>
+			{% elif request.path == "/register/"%}
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="{% url 'accounts:login' %}"><strong>Login</strong></a>
+					</li>
+				</ul>
+			{% endif %}
+		{% else %}
+			<span class="navbar-text ml-auto text-dark" style="margin-right: 20px;">
+				Hello, <strong>{{ request.user }}</strong>
+			</span>
+			<span>
+				<a class="navbar-text text-info" href="{% url 'accounts:logout' %}"><strong>Logout</strong></a>
+			</span>
+		{% endif %}
+  	</div>
+</nav>
+
+<script>
+	var prevScrollpos = window.pageYOffset;
+	window.onscroll = function() {
+		var currentScrollPos = window.pageYOffset;
+		if (prevScrollpos > currentScrollPos) {
+			document.querySelector(".navbar").style.top = "0";
+		} else {
+			document.querySelector(".navbar").style.top = "-80px";
+		}
+		prevScrollpos = currentScrollPos;
+	}
+</script>

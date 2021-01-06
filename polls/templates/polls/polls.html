@@ -1,25 +1,25 @@
 {% extends 'base.html' %} 
 {% block content %} 
-  <h1 class="text-center mb-3">Poll Questions</h1>
+  <h1 class="text-center mb-3 mt-5" style="color: white">Poll Questions</h1>
   {% if latest_question_list %}
-    <ul>
+    <div>
       {% for question in latest_question_list %}
-        <ul>
-          <div class="card mb-3">
+          <div class="card mb-3" style="background-color: white">
             <div class="card-body">
               <p class="lead">{{ question.question_text }}</p>
+              <p class="">Published date:  {{ question.pub_date }}</p>
               <a href="{% url 'polls:detail' question.id %}" class="btn btn-primary btn-sm">Vote Now</a>
-              <a href="{% url 'polls:results' question.id %}" class="btn btn-secondary btn-sm">Results</a>
+              <a href="{% url 'polls:results' question.id %}" class="btn btn-dark btn-sm">Results</a>
             </div>
           </div>
-        </ul>
       {% endfor %}
-    </ul>
+    </div>
   {% else %}
-    <p>
+    <p class="h4 text-light text-center m-5">
       No polls are available.
     </p>
   {% endif %}
+  <div style="height: 60px"></div>
 {% endblock %}
 
 {% comment %} <!DOCTYPE html>

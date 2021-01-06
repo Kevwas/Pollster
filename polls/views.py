@@ -1,36 +1,59 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect  # Http404
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse  # Http404
 from django.urls import reverse
 from django.db.models import F, Q, Count
 from django.views import generic
 from django.utils import timezone
+
+from django.contrib.auth.decorators import login_required
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 # from django.template import loader
 
 from .models import Question, Choice
 
+from django.contrib.auth.models import User
+
+from accounts.models import UserProfile
 
 def index(request):
   return render(request, 'pages/index.html')
 
+def resultsData(request, obj):
+    voteData = []
+
+    question = Question.objects.get(id=obj)
+    choices = question.choice_set.all()
+
+    for choice in choices:
+        voteData.append({choice.choice_text: choice.votes})
+
+    print(voteData)
+    return JsonResponse(voteData, safe=False)
+
 
 # 3 Generic views:
-class PollsView(generic.ListView):
+class PollsView(LoginRequiredMixin, generic.ListView):
+    login_url = 'accounts:login'
+    redirect_field_name = 'redirect_to'
+
     template_name = 'polls/polls.html'
     context_object_name = 'latest_question_list'
-
-    def get_queryset(self):
-        """Return the last five published questions (not including
-        those set to be
-        published in the future).
-        """
-        return Question.objects.exclude(
+    queryset = Question.objects.exclude(
             choice__isnull=True).annotate(Count('choice')).exclude(
             choice__count__lte=1).filter(
             pub_date__lte=timezone.now()
-        ).order_by('-pub_date')[:5]
+        ).order_by('-pub_date')
+
+    def dispatch(self, request, *args, **kwargs):        
+        return super(PollsView, self).dispatch(request, *args, **kwargs)
 
 
-class DetailView(generic.DetailView):
+class DetailView(LoginRequiredMixin, generic.DetailView):
+    login_url = 'accounts:login'
+    redirect_field_name = 'redirect_to'
+
     model = Question
     template_name = 'polls/detail.html'
 
@@ -43,7 +66,10 @@ class DetailView(generic.DetailView):
             choice__count__lte=1).filter(pub_date__lte=timezone.now())
 
 
-class ResultsView(generic.DetailView):
+class ResultsView(LoginRequiredMixin, generic.DetailView):
+    login_url = 'accounts:login'
+    redirect_field_name = 'redirect_to'
+
     model = Question
     template_name = 'polls/results.html'
 
@@ -55,25 +81,35 @@ class ResultsView(generic.DetailView):
             choice__isnull=True).annotate(Count('choice')).exclude(
             choice__count__lte=1).filter(pub_date__lte=timezone.now())
 
-
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
-    try:
-        select_choice = question.choice_set.get(pk=request.POST['choice'])
-    except (KeyError, Choice.DoesNotExist):
-        # Redisplay the question voting form
+    user_profile = UserProfile.objects.get(user=request.user)
+    polls_made = user_profile.get_polls_made()
+    if str(question_id) in polls_made:
+        # Redirect to the polls
         return render(request, 'polls/detail.html', {
             'question': question,
-            'error_message': "You didn't select a choice.",
+            'error_message': "You have already done this poll.",
         })
     else:
-        select_choice.votes = F('votes') + 1
-        select_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back Button.
-        return HttpResponseRedirect(reverse('polls:results',
-                                    args=(question.id,)))
+        try:
+            select_choice = question.choice_set.get(pk=request.POST['choice'])
+        except (KeyError, Choice.DoesNotExist):
+            # Redisplay the question voting form
+            return render(request, 'polls/detail.html', {
+                'question': question,
+                'error_message': "You didn't select a choice.",
+            })
+        else:
+            select_choice.votes = F('votes') + 1
+            select_choice.save()
+            user_profile.set_polls_made(question.id)
+            user_profile.save()
+            # Always return an HttpResponseRedirect after successfully dealing
+            # with POST data. This prevents data from being posted twice if a
+            # user hits the Back Button.
+            return HttpResponseRedirect(reverse('polls:results',
+                                        args=(question.id,)))
 
 # Index
 # 1
