@@ -16,10 +16,12 @@ app_name = 'polls'
 
 # Use generic views: Less code is better
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('polls/', views.PollsView.as_view(), name='polls'),
-    path('<int:pk>/', views.DetailView.as_view(), name='detail'),
-    path('<int:pk>/results/', views.ResultsView.as_view(), name='results'),
-    path('<int:question_id>/vote/', views.vote, name='vote'),
+    path('polls/page_<int:num>/', views.PollsView.as_view(), name='polls'),
+    path('polls/all/', views.AllPollsView.as_view(), name='all'),
+    path('polls/<int:pk>/detail', views.DetailView.as_view(), name='detail'),
+    path('polls/<int:pk>/results/', views.ResultsView.as_view(), name='results'),
+    path('polls/<int:question_id>/vote/', views.vote, name='vote'),
     path('resultsData/<str:obj>/', views.resultsData, name='resultsData'),
+    
+    path('', views.index, name='index'),
 ]

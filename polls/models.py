@@ -22,7 +22,6 @@ class Question(models.Model):
     was_published_recently.short_description = 'Published recently?'
     
 
-
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=100)

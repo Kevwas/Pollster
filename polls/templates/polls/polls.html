@@ -1,25 +1,60 @@
 {% extends 'base.html' %} 
+{% load static %}
 {% block content %} 
   <h1 class="text-center mb-3 mt-5" style="color: white">Poll Questions</h1>
   {% if latest_question_list %}
-    <div>
+    <div id="questions-container">
       {% for question in latest_question_list %}
-          <div class="card mb-3" style="background-color: white">
+          <div class="card mb-3 question-card" style="background-color: white">
             <div class="card-body">
-              <p class="lead">{{ question.question_text }}</p>
-              <p class="">Published date:  {{ question.pub_date }}</p>
+              <p class="lead question-text">{{ question.question_text }}</p>
+              <p>Published date:  <span class="pub-date">{{ question.pub_date }}</span></p>
               <a href="{% url 'polls:detail' question.id %}" class="btn btn-primary btn-sm">Vote Now</a>
               <a href="{% url 'polls:results' question.id %}" class="btn btn-dark btn-sm">Results</a>
             </div>
           </div>
       {% endfor %}
-    </div>
+    </div>    
   {% else %}
     <p class="h4 text-light text-center m-5">
       No polls are available.
     </p>
   {% endif %}
+  {% if not '/polls/all/' in request.path %}
+    <div style="display: flex; width: 100%; justify-content: center">
+      {% if num > 0 %}
+        <a id="back" href="" class="btn btn-dark m-2"><i class="fa fa-arrow-left"></i></a>
+      {% endif %}
+      {% if latest_question_list %}
+        {% if latest_question_list.count == 10 %}
+          <a id="next" href="" class="btn  btn-dark m-2"><i class="fa fa-arrow-right"></i></a> 
+        {% endif %}
+      {% endif %}
+    </div>
+  {% endif %}
   <div style="height: 60px"></div>
+
+  <script>
+    num = "{{ num|escapejs }}";
+    back_number = Number(num)-1;
+    next_number = Number(num)+1;
+    console.log(num);
+    back_url = "/polls/page_"+back_number+"/";
+    next_url = "/polls/page_"+next_number+"/";
+    console.log(next_url);
+
+    if (back_number === 0) {
+      document.getElementById("back").style.display = "none";
+    } else {
+      document.getElementById("back").style.display = "";
+      document.getElementById("back").href=back_url;  
+    }
+
+    if (document.getElementById("next")) {
+      document.getElementById("next").href=next_url; 
+    }
+  </script>
+
 {% endblock %}
 
 {% comment %} <!DOCTYPE html>

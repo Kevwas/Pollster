@@ -9,7 +9,7 @@
 </style>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: #32adff">
-	<a class="navbar-brand text-light" href="/"
+	<a class="navbar-brand text-light" href="{% url 'polls:index' %}"
 		style="
 			background: #007bff;
           	background: linear-gradient(to right, #3573c4, #33AEFF);
@@ -25,24 +25,20 @@
   	</button>
 
 	<div class="collapse navbar-collapse" id="navbarText">
-		{% if request.path != "/polls/" and request.user.is_authenticated %}
-			<ul class="navbar-nav mr-auto">
+		{% if "/polls/" in request.path %}
+			<form class="d-flex m-2 mr-auto">
+				<input id="search-input" onkeyup="filterQuestions()" class="form-control me-2" type="search" placeholder="Search Polls" aria-label="Search">
+				{% comment %} <button class="btn btn-outline-info ml-2" type="submit">Search</button> {% endcomment %}
+			</form>
+		{% else %}
+			<ul class="navbar-nav ">
 				<li class="nav-item active">
-					<a class="nav-link" href="{% url 'polls:polls' %}"><strong>Polls</strong> <span class="sr-only">(current)</span></a>
+					<a class="nav-link" href="{% url 'polls:polls' num=1 %}"><strong>Polls</strong> <span class="sr-only">(current)</span></a>
 				</li>
 			</ul>
 		{% endif %}
 		{% if not request.user.is_authenticated %}
-			{% if request.path == "/" %}
-				<ul class="navbar-nav mr-auto">
-					<li class="nav-item">
-						<a class="nav-link" href="{% url 'accounts:login' %}"><strong>Login</strong></a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="{% url 'accounts:register' %}"><strong>Register</strong></a>
-					</li>
-				</ul>
-			{% elif request.path == "/login/"%}
+			{% if request.path == "/login/"%}
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item">
 						<a class="nav-link" href="{% url 'accounts:register' %}"><strong>Register</strong></a>
@@ -54,6 +50,15 @@
 						<a class="nav-link" href="{% url 'accounts:login' %}"><strong>Login</strong></a>
 					</li>
 				</ul>
+			{% else %}
+				<ul class="navbar-nav ">
+					<li class="nav-item">
+						<a class="nav-link" href="{% url 'accounts:login' %}"><strong>Login</strong></a>
+					</li>
+					<li class="nav-item mr-auto">
+						<a class="nav-link" href="{% url 'accounts:register' %}"><strong>Register</strong></a>
+					</li>
+				</ul>
 			{% endif %}
 		{% else %}
 			<span class="navbar-text ml-auto text-dark" style="margin-right: 20px;">
@@ -63,6 +68,7 @@
 				<a class="navbar-text text-info" href="{% url 'accounts:logout' %}"><strong>Logout</strong></a>
 			</span>
 		{% endif %}
+		
   	</div>
 </nav>
 
@@ -76,5 +82,29 @@
 			document.querySelector(".navbar").style.top = "-80px";
 		}
 		prevScrollpos = currentScrollPos;
+	}
+</script>
+<script>
+	function filterQuestions() {
+		var input, filter, table, tr, td, i, txtValue;
+		input = document.getElementById("search-input");
+		filter = input.value.toUpperCase();
+		questions_container = document.getElementById("questions-container");
+		questions_cards = document.getElementsByClassName("question-card");
+		for (i = 0; i < questions_cards.length; i++) {
+			question_text = questions_cards[i].getElementsByClassName("question-text")[0];
+			pub_date = questions_cards[i].getElementsByClassName("pub-date")[0];
+			if (question_text || pub_date) {
+				txtValue = question_text.textContent || question_text.innerText;
+				dateValue = pub_date.textContent || pub_date.innerText;
+				composedValue = txtValue + " " + dateValue;
+				console.log(composedValue);
+				if (composedValue.toUpperCase().indexOf(filter) > -1) {
+					questions_cards[i].style.display = "";
+				} else {
+					questions_cards[i].style.display = "none";
+				}
+			}       
+		}
 	}
 </script>

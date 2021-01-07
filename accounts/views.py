@@ -42,7 +42,7 @@ def loginView(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect(reverse('polls:polls'))
+            return redirect(reverse('polls:polls', args=(1,)))
         else:
             messages.info(request, 'Incorrect Credentials')
     context = {}

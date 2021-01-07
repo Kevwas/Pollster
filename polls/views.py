@@ -17,8 +17,9 @@ from django.contrib.auth.models import User
 
 from accounts.models import UserProfile
 
+
 def index(request):
-  return render(request, 'pages/index.html')
+    return render(request, 'pages/index.html')
 
 def resultsData(request, obj):
     voteData = []
@@ -34,20 +35,51 @@ def resultsData(request, obj):
 
 
 # 3 Generic views:
-class PollsView(LoginRequiredMixin, generic.ListView):
-    login_url = 'accounts:login'
-    redirect_field_name = 'redirect_to'
-
+# class PollsView(LoginRequiredMixin, generic.ListView):
+class PollsView(generic.ListView):
+    # login_url = 'accounts:login'
+    # redirect_field_name = 'redirect_to'
     template_name = 'polls/polls.html'
     context_object_name = 'latest_question_list'
-    queryset = Question.objects.exclude(
+    multiplier = 10
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        num = self.request.path.replace('/polls/page_', '').replace('/', '')
+        context['num'] = int(num)
+        return context
+
+    def get_queryset(self):
+        """
+        Excludes any questions that aren't published yet
+        and those with less than 2 choices.
+        """
+        num_str = self.request.path.replace('/polls/page_', '').replace('/', '')
+        num = int(num_str)
+        return Question.objects.exclude(
+            choice__isnull=True).annotate(Count('choice')).exclude(
+            choice__count__lte=1).filter(
+            pub_date__lte=timezone.now()
+        ).order_by('-pub_date')[(num-1)*self.multiplier:num*self.multiplier]
+
+
+class AllPollsView(generic.ListView):
+    # login_url = 'accounts:login'
+    # redirect_field_name = 'redirect_to'
+    template_name = 'polls/polls.html'
+    context_object_name = 'latest_question_list'
+
+
+    def get_queryset(self):
+        """
+        Excludes any questions that aren't published yet
+        and those with less than 2 choices.
+        """
+        return Question.objects.exclude(
             choice__isnull=True).annotate(Count('choice')).exclude(
             choice__count__lte=1).filter(
             pub_date__lte=timezone.now()
         ).order_by('-pub_date')
-
-    def dispatch(self, request, *args, **kwargs):        
-        return super(PollsView, self).dispatch(request, *args, **kwargs)
 
 
 class DetailView(LoginRequiredMixin, generic.DetailView):
@@ -59,23 +91,26 @@ class DetailView(LoginRequiredMixin, generic.DetailView):
 
     def get_queryset(self):
         """
-        Excludes any questions that aren't published yet.
+        Excludes any questions that aren't published yet
+        and those with less than 2 choices.
         """
         return Question.objects.exclude(
             choice__isnull=True).annotate(Count('choice')).exclude(
             choice__count__lte=1).filter(pub_date__lte=timezone.now())
 
 
-class ResultsView(LoginRequiredMixin, generic.DetailView):
-    login_url = 'accounts:login'
-    redirect_field_name = 'redirect_to'
+# class ResultsView(LoginRequiredMixin, generic.DetailView):
+class ResultsView(generic.DetailView):
+    # login_url = 'accounts:login'
+    # redirect_field_name = 'redirect_to'
 
     model = Question
     template_name = 'polls/results.html'
 
     def get_queryset(self):
         """
-        Excludes any questions that aren't published yet.
+        Excludes any questions that aren't published yet
+        and those with less than 2 choices.
         """
         return Question.objects.exclude(
             choice__isnull=True).annotate(Count('choice')).exclude(
