@@ -44,7 +44,7 @@ def loginView(request):
             login(request, user)
             return redirect(reverse('polls:polls', args=(1,)))
         else:
-            messages.info(request, 'Incorrect Credentials')
+            messages.error(request, 'Incorrect Credentials')
     context = {}
     return render(request, 'accounts/login.html', context)
 

@@ -152,8 +152,12 @@
                         <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" required>
                         <label for="inputPassword">Password</label>
                     </div>
-
-                    <div class="custom-control custom-checkbox mb-3">
+                    {% for message in messages %}
+                        {% if message.tags == "error" %}
+                            <p class="h9 text-center">Don't remember your password? <a href="{% url 'accounts:reset_password' %}"><strong>Recover</strong></a></p>
+                        {% endif %}
+                    {% endfor %}
+                    <div class="custom-control custom-checkbox mb-3 ml-1">
                         <input type="checkbox" class="custom-control-input" id="customCheck1">
                         <label class="custom-control-label" for="customCheck1">Remember password</label>
                     </div>
@@ -162,11 +166,21 @@
                     <div class="d-flex justify-content-center links text-danger">
                         {{form.errors}}
                     </div>
-
+                    
                     {% for message in messages %}
                         <div class="mt-4">
                             <div class="d-flex justify-content-center links">
-                                <p id="messages" class="text-info">{{message}}</p>
+                                <p id="messages" 
+                                    {% if message.tags == "success" %} 
+                                        class="text-success" 
+                                    {% elif message.tags == "error" %}
+                                        class="text-danger"
+                                    {% else %}
+                                        class="text-info"
+                                    {% endif %}
+                                >
+                                    {{message}}
+                                </p>
                             </div>
                         </div>    
                     {% endfor %}

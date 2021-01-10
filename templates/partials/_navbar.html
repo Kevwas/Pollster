@@ -86,25 +86,39 @@
 </script>
 <script>
 	function filterQuestions() {
-		var input, filter, table, tr, td, i, txtValue;
-		input = document.getElementById("search-input");
-		filter = input.value.toUpperCase();
-		questions_container = document.getElementById("questions-container");
-		questions_cards = document.getElementsByClassName("question-card");
-		for (i = 0; i < questions_cards.length; i++) {
-			question_text = questions_cards[i].getElementsByClassName("question-text")[0];
-			pub_date = questions_cards[i].getElementsByClassName("pub-date")[0];
+		const input = document.getElementById("search-input");
+		const filter = input.value.toUpperCase();
+		const questions_container = document.getElementById("questions-container");
+		let questions_cards = document.getElementsByClassName("question-card");
+		let no_found_text = document.getElementById("no-found-text");
+		no_found_text.style.display = "none";
+		let match = false;
+		for (let i = 0; i < questions_cards.length; i++) {
+			let question_text = questions_cards[i].getElementsByClassName("question-text")[0];
+			let pub_date = questions_cards[i].getElementsByClassName("pub-date")[0];
 			if (question_text || pub_date) {
-				txtValue = question_text.textContent || question_text.innerText;
-				dateValue = pub_date.textContent || pub_date.innerText;
-				composedValue = txtValue + " " + dateValue;
-				console.log(composedValue);
-				if (composedValue.toUpperCase().indexOf(filter) > -1) {
-					questions_cards[i].style.display = "";
-				} else {
+				let txtValue = question_text.textContent || question_text.innerText;
+				let dateValue = pub_date.textContent || pub_date.innerText;
+				let composedValue = txtValue + " " + dateValue;
+				if (composedValue.toUpperCase().indexOf(filter) === -1) {
+					console.log(composedValue.toUpperCase().indexOf(filter));
+					no_found_text.style.display = "block";
+					no_found_text.innerText = "No matches for " + input.value;
 					questions_cards[i].style.display = "none";
+				} else {
+					match = true;
+					questions_cards[i].style.display = "block";
+					no_found_text.style.display = "none";
 				}
 			}       
 		}
+		if (match) no_found_text.style.display = "none";
 	}
+
+	function init() {
+	    // Clear forms here
+	    document.getElementById("search-input").value = "";
+	}
+	
+	window.onload = init;
 </script>

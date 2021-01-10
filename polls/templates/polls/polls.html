@@ -14,46 +14,54 @@
             </div>
           </div>
       {% endfor %}
-    </div>    
+    </div>
+    {% if not '/polls/all/' in request.path %}
+      <div style="display: flex; width: 100%; justify-content: center">
+        {% if num > 0 %}
+          <a id="back" href="" class="btn btn-dark m-2"><i class="fa fa-arrow-left"></i></a>
+          {% endif %}
+          {% if latest_question_list %}
+            {% if latest_question_list.count == 10 %}
+              <a id="next" href="" class="btn  btn-dark m-2"><i class="fa fa-arrow-right"></i></a> 
+            {% endif %}
+        {% endif %}
+      </div>
+      <a href="{% url 'polls:all' %}" style="text-decoration: none">
+        <button type="button" class="btn btn-secondary btn-lg btn-block mt-2">
+          Load all polls
+        </button>
+      </a>
+    {% endif %}    
   {% else %}
     <p class="h4 text-light text-center m-5">
       No polls are available.
     </p>
   {% endif %}
-  {% if not '/polls/all/' in request.path %}
-    <div style="display: flex; width: 100%; justify-content: center">
-      {% if num > 0 %}
-        <a id="back" href="" class="btn btn-dark m-2"><i class="fa fa-arrow-left"></i></a>
-      {% endif %}
-      {% if latest_question_list %}
-        {% if latest_question_list.count == 10 %}
-          <a id="next" href="" class="btn  btn-dark m-2"><i class="fa fa-arrow-right"></i></a> 
-        {% endif %}
-      {% endif %}
-    </div>
-  {% endif %}
+  <p id="no-found-text" class="h4 text-light text-center m-5">
+  </p>
   <div style="height: 60px"></div>
+  {% if not '/polls/all/' in request.path %}
+    <script>
+      num = "{{ num|escapejs }}";
+      back_number = Number(num)-1;
+      next_number = Number(num)+1;
+      console.log(num);
+      back_url = "/polls/page_"+back_number+"/";
+      next_url = "/polls/page_"+next_number+"/";
+      console.log(next_url);
 
-  <script>
-    num = "{{ num|escapejs }}";
-    back_number = Number(num)-1;
-    next_number = Number(num)+1;
-    console.log(num);
-    back_url = "/polls/page_"+back_number+"/";
-    next_url = "/polls/page_"+next_number+"/";
-    console.log(next_url);
+      if (back_number === 0) {
+        document.getElementById("back").style.display = "none";
+      } else {
+        document.getElementById("back").style.display = "";
+        document.getElementById("back").href=back_url;  
+      }
 
-    if (back_number === 0) {
-      document.getElementById("back").style.display = "none";
-    } else {
-      document.getElementById("back").style.display = "";
-      document.getElementById("back").href=back_url;  
-    }
-
-    if (document.getElementById("next")) {
-      document.getElementById("next").href=next_url; 
-    }
-  </script>
+      if (document.getElementById("next")) {
+        document.getElementById("next").href=next_url; 
+      }
+    </script>
+  {% endif %} 
 
 {% endblock %}
 
