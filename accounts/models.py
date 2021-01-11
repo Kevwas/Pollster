@@ -10,6 +10,7 @@ class UserProfile(models.Model):
     identification = models.IntegerField(null=True, blank=True)
     # age = models.IntegerField(null=True, blank=True)
     # location = models.CharField(max_length=50, null=True, blank=True)
+    profile_pic = models.ImageField(null=True, blank=True, default='')
 
     def set_polls_made(self, poll):
         loaded_polls = self.get_polls_made()

@@ -154,7 +154,7 @@
                     </div>
                     {% for message in messages %}
                         {% if message.tags == "error" %}
-                            <p class="h9 text-center">Don't remember your password? <a href="{% url 'accounts:reset_password' %}"><strong>Recover</strong></a></p>
+                            <p class="h9 text-center">Don't remember your password? <a href="{% url 'accounts:password_reset' %}"><strong>Recover</strong></a></p>
                         {% endif %}
                     {% endfor %}
                     <div class="custom-control custom-checkbox mb-3 ml-1">

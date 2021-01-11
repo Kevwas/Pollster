@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [
@@ -121,9 +122,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_URL = '/images/'
+
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
+MEDIA_ROOT = BASE_DIR / 'static/images'
 
 #SMTP Configuration (Simple Mail Transfer Protocol)
 
@@ -133,3 +139,5 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'arizakevin.dev@gmail.com'
 EMAIL_HOST_PASSWORD = 'Vkpwcassc3141592'
+
+# Set the data above to an .env file for production
