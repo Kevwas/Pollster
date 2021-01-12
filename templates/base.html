@@ -40,20 +40,69 @@
         background-attachment: fixed;
         z-index:-1;
       }
+    </style>
+    <style>
+      #wrapper {
+        overflow-x: hidden;
+      }
 
-      .container {
-        margin-top: 80px;
+      #sidebar-wrapper {
+        min-height: 100vh;
+        margin-left: -15rem;
+        -webkit-transition: margin .25s ease-out;
+        -moz-transition: margin .25s ease-out;
+        -o-transition: margin .25s ease-out;
+        transition: margin .25s ease-out;
+      }
+
+      #sidebar-wrapper .sidebar-heading {
+        padding: 0.875rem 1.25rem;
+        font-size: 1.2rem;
+      }
+
+      #sidebar-wrapper .list-group {
+        width: 15rem;
+      }
+
+      #page-content-wrapper {
+        min-width: 100vw;
+      }
+
+      #wrapper.toggled #sidebar-wrapper {
+        margin-left: 0;
+      }
+
+      @media (min-width: 768px) {
+        #sidebar-wrapper {
+          margin-left: 0;
+        }
+
+        #page-content-wrapper {
+          min-width: 0;
+          width: 100%;
+          padding-top: 5%;
+        }
+
+        #wrapper.toggled #sidebar-wrapper {
+          margin-left: -15rem;
+        }
       }
     </style>
   </head>
   <body>
-    <!-- NavBar -->
-    {% include 'partials/_navbar.html' %}
-    <div id="particles-js" class="fixed-bg"></div>
-    <div class="container">
-      <div class="row">
-        <div class="col-md-8 m-auto">
-          {% block content %}{% endblock %}
+    <div class="d-flex" id="wrapper">
+    	{% if request.user.is_authenticated %}
+        {% include 'partials/_sidebar.html' %}
+      {% endif %}
+      <div id="particles-js" class="fixed-bg"></div>
+      <div id="page-content-wrapper">
+        {% include 'partials/_navbar.html' %}
+        <div class="container">
+          <div class="row">
+            <div class="col-md-8 m-auto">
+              {% block content %}{% endblock %}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -66,8 +115,24 @@
           console.log('callback - particles.js config loaded');
       });
     </script>
+
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!-- Menu Toggle Script -->
+    <script>
+      $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+
+        var burger_class = this.className;
+	      if (burger_class === "menu burger-to-right") {
+          	this.className = "menu burger-to-left";
+	      } else {
+          	this.className = "menu burger-to-right";
+	      }
+      });
+    </script>
   </body>
 </html>

@@ -1,7 +1,7 @@
 {% extends 'base.html' %} 
 {% load static %}
 {% block content %} 
-  <h1 class="text-center mb-3 mt-5" style="color: white">Poll Questions</h1>
+  <h1 class="text-center mb-3 mt-5" style="color: white">Dashboard</h1>
   <form class="d-flex m-4 mx-auto">
 		<input id="search-input" onkeyup="filterQuestions()" class="form-control me-2" type="search" placeholder="Filter Polls" aria-label="Search">
 		{% comment %} <button class="btn btn-outline-info ml-2" type="submit">Search</button> {% endcomment %}
@@ -19,7 +19,7 @@
           </div>
       {% endfor %}
     </div>
-    {% if not '/polls/all/' in request.path %}
+    {% comment %} {% if not '/polls/all/' in request.path %}
       <div style="display: flex; width: 100%; justify-content: center">
         {% if page > 0 %}
           <a id="back" href="" class="btn btn-dark m-2"><i class="fa fa-arrow-left"></i></a>
@@ -33,7 +33,7 @@
           Load all polls
         </button>
       </a>
-    {% endif %}    
+    {% endif %}     {% endcomment %}
   {% else %}
     <p class="h4 text-light text-center m-5">
       No polls are available.
@@ -42,7 +42,7 @@
   <p id="no-found-text" class="h4 text-light text-center m-5">
   </p>
   <div style="height: 60px"></div>
-  {% if not '/polls/all/' in request.path %}
+  {% comment %} {% if not '/polls/all/' in request.path %}
     <script>
       page = "{{ page|escapejs }}";
       back_number = Number(page)-1;
@@ -63,7 +63,7 @@
         document.getElementById("next").href=next_url; 
       }
     </script>
-  {% endif %}
+  {% endif %} {% endcomment %}
   <script>
     function filterQuestions() {
       const input = document.getElementById("search-input");

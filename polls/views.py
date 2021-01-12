@@ -45,8 +45,8 @@ class PollsView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        num = self.request.path.replace('/polls/page_', '').replace('/', '')
-        context['num'] = int(num)
+        page = self.request.path.replace('/polls/page_', '').replace('/', '')
+        context['page'] = int(page)
         return context
 
     def get_queryset(self):
@@ -54,13 +54,13 @@ class PollsView(generic.ListView):
         Excludes any questions that aren't published yet
         and those with less than 2 choices.
         """
-        num_str = self.request.path.replace('/polls/page_', '').replace('/', '')
-        num = int(num_str)
+        page_str = self.request.path.replace('/polls/page_', '').replace('/', '')
+        page_num = int(page_str)
         return Question.objects.exclude(
             choice__isnull=True).annotate(Count('choice')).exclude(
             choice__count__lte=1).filter(
             pub_date__lte=timezone.now()
-        ).order_by('-pub_date')[(num-1)*self.multiplier:num*self.multiplier]
+        ).order_by('-pub_date')[(page_num-1)*self.multiplier:page_num*self.multiplier]
 
 
 class AllPollsView(generic.ListView):
@@ -145,6 +145,23 @@ def vote(request, question_id):
             # user hits the Back Button.
             return HttpResponseRedirect(reverse('polls:results',
                                         args=(question.id,)))
+
+class DashboardView(generic.ListView):
+    # login_url = 'accounts:login'
+    # redirect_field_name = 'redirect_to'
+    template_name = 'pages/dashboard.html'
+    context_object_name = 'latest_question_list'
+
+    def get_queryset(self):
+        """
+        Excludes any questions that aren't published yet
+        and those with less than 2 choices.
+        """
+        return Question.objects.exclude(
+            choice__isnull=True).annotate(Count('choice')).exclude(
+            choice__count__lte=1).filter(
+            pub_date__lte=timezone.now()
+        ).order_by('-pub_date')
 
 # Index
 # 1
