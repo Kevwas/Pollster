@@ -112,11 +112,10 @@
 		margin_left_num = parseFloat(margin_left);
 
 		if (margin_left_num < 0 ) {
-			menu_toggle.className = "menu burger-to-right";
-		} else {
 			menu_toggle.className = "menu burger-to-left";
+		} else {
+			menu_toggle.className = "menu burger-to-right";
 		}
-      	$("#wrapper").toggleClass("toggled");
     }); {% endcomment %}
 	// Plain Javascript
 	menu_toggle.addEventListener("click", (e) => {
@@ -126,11 +125,10 @@
 		margin_left_num = parseFloat(margin_left);
 
 		if (margin_left_num < 0 ) {
-			menu_toggle.className = "menu burger-to-right";
-		} else {
 			menu_toggle.className = "menu burger-to-left";
+		} else {
+			menu_toggle.className = "menu burger-to-right";
 		}
-		wrapper.classList.toggle("toggled");
 	}); 
 
 	// Update the burger arrow when the window resizes
