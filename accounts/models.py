@@ -14,7 +14,7 @@ class UserProfile(models.Model):
 
     def set_polls_made(self, poll):
         loaded_polls = self.get_polls_made()
-        new_poll = str(poll)
+        new_poll = int(poll)
         loaded_polls.append(new_poll)
         self.polls_made = json.dumps(loaded_polls)
 

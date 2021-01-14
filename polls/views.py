@@ -52,9 +52,7 @@ class PollsView(generic.ListView):
 
         user_profile = UserProfile.objects.get(id=self.request.user.id)
         polls_made = json.loads(user_profile.polls_made)
-        polls_made_numbers = [ int(poll) for poll in polls_made]
-        print(polls_made_numbers)
-        context['polls_made'] = polls_made_numbers
+        context['polls_made'] = polls_made
 
         return context
 
@@ -83,9 +81,7 @@ class AllPollsView(generic.ListView):
 
         user_profile = UserProfile.objects.get(id=self.request.user.id)
         polls_made = json.loads(user_profile.polls_made)
-        polls_made_numbers = [ int(poll) for poll in polls_made]
-        print(polls_made_numbers)
-        context['polls_made'] = polls_made_numbers
+        context['polls_made'] = polls_made
 
         return context
 
@@ -139,7 +135,7 @@ def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     user_profile = UserProfile.objects.get(user=request.user)
     polls_made = user_profile.get_polls_made()
-    if str(question_id) in polls_made:
+    if question_id in polls_made:
         # Redirect to the polls
         return render(request, 'polls/detail.html', {
             'question': question,
@@ -188,7 +184,7 @@ class DashboardView(generic.ListView):
         questions_to_return = []
         for question in questions:
             print(question.id)
-            if str(question.id) in polls_made:
+            if question.id in polls_made:
                 print("MATCH!")
                 questions_to_return.append(question)
 
