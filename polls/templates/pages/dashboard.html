@@ -1,7 +1,8 @@
 {% extends 'base.html' %} 
 {% load static %}
 {% block content %} 
-  <h1 class="text-center mb-3 mt-5" style="color: white">Dashboard</h1>
+  <h1 class="text-center mb-3 mt-5 text-light">Dashboard</h1>
+  <p class="text-center mb-3 lead text-light">Polls Made</p>
   <form class="d-flex m-4 mx-auto">
 		<input id="search-input" onkeyup="filterQuestions()" class="form-control me-2" type="search" placeholder="Filter Polls" aria-label="Search">
 		{% comment %} <button class="btn btn-outline-info ml-2" type="submit">Search</button> {% endcomment %}
@@ -13,7 +14,6 @@
             <div class="card-body">
               <p class="lead question-text">{{ question.question_text }}</p>
               <p>Published date:  <span class="pub-date">{{ question.pub_date }}</span></p>
-              <a href="{% url 'polls:detail' question.id %}" class="btn btn-primary btn-sm">Vote Now</a>
               <a href="{% url 'polls:results' question.id %}" class="btn btn-dark btn-sm">Results</a>
             </div>
           </div>

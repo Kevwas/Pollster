@@ -13,8 +13,14 @@
             <div class="card-body">
               <p class="lead question-text">{{ question.question_text }}</p>
               <p>Published date:  <span class="pub-date">{{ question.pub_date }}</span></p>
-              <a href="{% url 'polls:detail' question.id %}" class="btn btn-primary btn-sm">Vote Now</a>
-              <a href="{% url 'polls:results' question.id %}" class="btn btn-dark btn-sm">Results</a>
+              <div style="display: flex; align-items: center; flex-direction: row;">
+                {% if question.id not in polls_made %}
+                  <a href="{% url 'polls:detail' question.id %}" class="btn btn-primary btn-sm mr-2">Vote Now</a>
+                {% else %}
+                  <a class="text-success mr-auto" style="margin-bottom: -15px">Already voted</p>
+                {% endif %}
+                <a href="{% url 'polls:results' question.id %}" class="btn btn-dark btn-sm">Results</a>
+              </div>
             </div>
           </div>
       {% endfor %}

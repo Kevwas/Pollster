@@ -96,28 +96,11 @@
 </style>
 <div id="menu-toggle" class="menu burger-to-left"><span></span></div>
 <script>
-    
-
 	var menu_toggle = document.getElementById("menu-toggle");
 	var wrapper = document.getElementById('wrapper');
 	var sidebar_wrapper = document.getElementById('sidebar-wrapper');
 	var margin_left, margin_left_num;
 
-	// Ubdate the burger arrow and toggle the sidebar when the burger is clicked
-	// jQuery
-	{% comment %} $("#menu-toggle").click(function(e) {
-      	e.preventDefault();
-      	$("#wrapper").toggleClass("toggled");
-      	margin_left = window.getComputedStyle(sidebar_wrapper).marginLeft;
-		margin_left_num = parseFloat(margin_left);
-
-		if (margin_left_num < 0 ) {
-			menu_toggle.className = "menu burger-to-left";
-		} else {
-			menu_toggle.className = "menu burger-to-right";
-		}
-    }); {% endcomment %}
-	// Plain Javascript
 	menu_toggle.addEventListener("click", (e) => {
 		e.preventDefault();
 		wrapper.classList.toggle("toggled");
@@ -153,8 +136,8 @@
 	// Update the burger arrow when the window is loaded
 	window.addEventListener("load", (e) => {
 		e.preventDefault();
-		console.log("window loaded!");
-		console.log("WINDOW WIDTH: " + document.documentElement.clientWidth);
+		//console.log("window loaded!");
+		//console.log("WINDOW WIDTH: " + document.documentElement.clientWidth);
 		margin_left = window.getComputedStyle(sidebar_wrapper).marginLeft;
 		margin_left_num = parseFloat(margin_left);
 		//console.log("Margin Left of sidebar: " + margin_left_num);

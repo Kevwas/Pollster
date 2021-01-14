@@ -17,6 +17,8 @@ from django.contrib.auth.models import User
 
 from accounts.models import UserProfile
 
+import json
+
 
 def index(request):
     return render(request, 'pages/index.html')
@@ -47,6 +49,13 @@ class PollsView(generic.ListView):
         context = super().get_context_data(**kwargs)
         page = self.request.path.replace('/polls/page_', '').replace('/', '')
         context['page'] = int(page)
+
+        user_profile = UserProfile.objects.get(id=self.request.user.id)
+        polls_made = json.loads(user_profile.polls_made)
+        polls_made_numbers = [ int(poll) for poll in polls_made]
+        print(polls_made_numbers)
+        context['polls_made'] = polls_made_numbers
+
         return context
 
     def get_queryset(self):
@@ -69,6 +78,16 @@ class AllPollsView(generic.ListView):
     template_name = 'polls/polls.html'
     context_object_name = 'latest_question_list'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        user_profile = UserProfile.objects.get(id=self.request.user.id)
+        polls_made = json.loads(user_profile.polls_made)
+        polls_made_numbers = [ int(poll) for poll in polls_made]
+        print(polls_made_numbers)
+        context['polls_made'] = polls_made_numbers
+
+        return context
 
     def get_queryset(self):
         """
@@ -157,11 +176,23 @@ class DashboardView(generic.ListView):
         Excludes any questions that aren't published yet
         and those with less than 2 choices.
         """
-        return Question.objects.exclude(
+        user_profile = UserProfile.objects.get(id=self.request.user.id)
+        polls_made = json.loads(user_profile.polls_made)
+
+        questions = Question.objects.exclude(
             choice__isnull=True).annotate(Count('choice')).exclude(
             choice__count__lte=1).filter(
             pub_date__lte=timezone.now()
         ).order_by('-pub_date')
+
+        questions_to_return = []
+        for question in questions:
+            print(question.id)
+            if str(question.id) in polls_made:
+                print("MATCH!")
+                questions_to_return.append(question)
+
+        return questions_to_return
 
 # Index
 # 1
