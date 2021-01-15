@@ -50,10 +50,10 @@ class PollsView(generic.ListView):
         page = self.request.path.replace('/polls/page_', '').replace('/', '')
         context['page'] = int(page)
 
-        user_profile = UserProfile.objects.get(id=self.request.user.id)
-        polls_made = json.loads(user_profile.polls_made)
-        context['polls_made'] = polls_made
-
+        if self.request.user.is_authenticated:
+            user_profile = UserProfile.objects.get(id=self.request.user.id)
+            polls_made = json.loads(user_profile.polls_made)
+            context['polls_made'] = polls_made
         return context
 
     def get_queryset(self):
@@ -79,10 +79,10 @@ class AllPollsView(generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        user_profile = UserProfile.objects.get(id=self.request.user.id)
-        polls_made = json.loads(user_profile.polls_made)
-        context['polls_made'] = polls_made
-
+        if self.request.user.is_authenticated:
+            user_profile = UserProfile.objects.get(id=self.request.user.id)
+            polls_made = json.loads(user_profile.polls_made)
+            context['polls_made'] = polls_made
         return context
 
     def get_queryset(self):
@@ -161,7 +161,9 @@ def vote(request, question_id):
             return HttpResponseRedirect(reverse('polls:results',
                                         args=(question.id,)))
 
-class DashboardView(generic.ListView):
+class DashboardView(LoginRequiredMixin, generic.ListView):
+    login_url = 'accounts:login'
+    redirect_field_name = 'redirect_to'
     # login_url = 'accounts:login'
     # redirect_field_name = 'redirect_to'
     template_name = 'pages/dashboard.html'
@@ -183,9 +185,9 @@ class DashboardView(generic.ListView):
 
         questions_to_return = []
         for question in questions:
-            print(question.id)
+            # print(question.id)
             if question.id in polls_made:
-                print("MATCH!")
+                # print("MATCH!")
                 questions_to_return.append(question)
 
         return questions_to_return

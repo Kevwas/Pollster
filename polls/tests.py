@@ -7,13 +7,16 @@ from accounts.models import UserProfile
 from django.contrib.auth.models import User
 
 from .models import Question, Choice
+from accounts.models import UserProfile
 
 from django.contrib.auth import authenticate, login, logout, get_user_model
 
 def create_temporary_user_to_login(obj):
     user_model = get_user_model()
     user = user_model.objects.create_user('temporary', 'temporary@user.com', 'PemtUser123')
+
     obj.client.login(username='temporary', password='PemtUser123')
+
     return user
 
 def create_question_with_choices(question_text, days, choices=3):
@@ -87,7 +90,8 @@ class ExampleGetTest(TestCase):
 
 class UserCreationAndLoginTest(TestCase):
     def setUp(self):
-        create_temporary_user_to_login(self)
+        user = create_temporary_user_to_login(self)
+        user_profile = UserProfile.objects.create(user=user, identification=123456789)
 
     def test_secure_page(self):
         response = self.client.get(reverse('polls:all'))
@@ -174,7 +178,8 @@ class QuestionResultsViewTests(TestCase):
 
 class QuestionPollsViewTests(TestCase):
     def setUp(self):
-        create_temporary_user_to_login(self)
+        user = create_temporary_user_to_login(self)
+        user_profile = UserProfile.objects.create(user=user, identification=123456789)
 
     def test_no_questions(self):
         """
@@ -305,6 +310,17 @@ class IndexViewTest(TestCase):
         response = self.client.get(reverse('polls:index'))
         self.assertEqual(response.status_code, 200)
 
+class DashboardViewTest(TestCase):
+    def test_dashboard_view_with_user_not_authenticated(self):
+        response = self.client.get(reverse('polls:dashboard'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_dashboard_view_with_user_authenticated(self):
+        user = create_temporary_user_to_login(self)
+        user_profile = UserProfile.objects.create(user=user, identification=123456789)
+        response = self.client.get(reverse('polls:dashboard'))
+        self.assertEqual(response.status_code, 200)
+
 
 class UserPagesRestrictionsTests(TestCase):
     def test_index_view(self):
@@ -313,6 +329,8 @@ class UserPagesRestrictionsTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_polls_view(self):
+        user = create_temporary_user_to_login(self)
+        user_profile = UserProfile.objects.create(user=user, identification=123456789)
         url = reverse('polls:polls', args=(1,))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)

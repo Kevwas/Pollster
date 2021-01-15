@@ -100,6 +100,7 @@
 	var wrapper = document.getElementById('wrapper');
 	var sidebar_wrapper = document.getElementById('sidebar-wrapper');
 	var margin_left, margin_left_num;
+	var questions_container = document.getElementById('question-container');
 
 	menu_toggle.addEventListener("click", (e) => {
 		e.preventDefault();
@@ -109,13 +110,18 @@
 
 		if (margin_left_num < 0 ) {
 			menu_toggle.className = "menu burger-to-left";
+			if (window.innerWidth > 829) {
+				document.getElementById("main-container").style.marginLeft = "15rem";
+			}
 		} else {
 			menu_toggle.className = "menu burger-to-right";
+			document.getElementById("main-container").style.marginLeft = "auto";
 		}
 	}); 
 
 	// Update the burger arrow when the window resizes
 	window.addEventListener("resize",(e) => {
+		//console.log(window.innerWidth)
 		e.preventDefault();
 		if (document.documentElement.clientWidth >= 768) {
 			//console.log("Bigger or equal to 768");
@@ -123,10 +129,14 @@
 				wrapper.classList.toggle("toggled");
 			}
 			menu_toggle.className = "menu burger-to-left";
+			if (window.innerWidth > 829) {
+				document.getElementById("main-container").style.marginLeft = "15rem";
+			}
 		} else {
 			//console.log("Less than 768");
 			if (wrapper.className === "d-flex") {
 				menu_toggle.className = "menu burger-to-right";
+				document.getElementById("main-container").style.marginLeft = "auto";
 			}
 		}
 		//console.log("window resized!");
@@ -144,9 +154,13 @@
 
 		if (margin_left_num < 0) {
 			menu_toggle.className = "menu burger-to-right";
+			document.getElementById("main-container").style.marginLeft = "auto";
 			//console.log("set burger button to right");
 		} else {
 			menu_toggle.className = "menu burger-to-left";
+			if (window.innerWidth > 829) {
+				document.getElementById("main-container").style.marginLeft = "15rem";
+			}
 			//console.log("set burger button to left");
 		}
 	}, true);

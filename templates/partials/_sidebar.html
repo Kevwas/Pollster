@@ -1,6 +1,11 @@
 <!-- Sidebar -->
+    <style>
+	    .container {
+	    	transition: all 0.3s;
+	    }
+    </style>
     <div class="bg-light border-right" id="sidebar-wrapper">
-        <div class="sidebar-heading">
+        {% comment %} <div class="sidebar-heading">
             <a class="navbar-brand text-light" href="{% url 'polls:index' %}"
                 style="
                     background: #007bff;
@@ -12,8 +17,25 @@
             >
                 <strong>POLLSTER</strong>
             </a>
-        </div>
+        </div> {% endcomment %}
         <div class="list-group list-group-flush">
+            <div id="user-image" class="container p-5" style="display: flex; justify-content: center; align-items: center; margin-top: 80px">
+                <div class="container" 
+                     style="
+                            display: flex; 
+                            justify-content: center; 
+                            align-items: center;
+                            background-color: #bfbcbc;
+                            width: 150px;
+                            height: 150px;
+                            -moz-border-radius: 75px;
+                            -webkit-border-radius: 75px;
+                            border-radius: 75px;
+                        "
+                >
+                    <i class="fa fa-user fa-5x"></i>
+                </div>
+            </div>
             <a href="{% url 'polls:dashboard'%}" class="list-group-item list-group-item-action bg-light">Dashboard</a>
             <a href="{% url 'polls:polls' page=1 %}" class="list-group-item list-group-item-action bg-light">Polls</a>
             <a href="#" class="list-group-item list-group-item-action bg-light">Settings</a>

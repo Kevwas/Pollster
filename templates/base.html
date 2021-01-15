@@ -53,7 +53,11 @@
         -moz-transition: margin .25s ease-out;
         -o-transition: margin .25s ease-out;
         transition: margin .25s ease-out;
+        position: fixed;
+        top: 0;
+    		z-index: 999;
       }
+
 
       #sidebar-wrapper .sidebar-heading {
         padding: 0.875rem 1.25rem;
@@ -97,9 +101,9 @@
       <div id="particles-js" class="fixed-bg"></div>
       <div id="page-content-wrapper">
         {% include 'partials/_navbar.html' %}
-        <div class="container">
+        <div class="container" id="main-container">
           <div class="row">
-            <div class="col-md-8 m-auto">
+            <div class="col-md-8 p-5 m-auto">
               {% block content %}{% endblock %}
             </div>
           </div>
@@ -120,19 +124,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-    <!-- Menu Toggle Script -->
-    {% comment %} <script>
-      $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
+      <!-- Menu Toggle Script -->
+      {% comment %} <script>
+        $("#menu-toggle").click(function(e) {
+          e.preventDefault();
+          $("#wrapper").toggleClass("toggled");
 
-        var burger_class = this.className;
-	      if (burger_class === "menu burger-to-right") {
-          	this.className = "menu burger-to-left";
-	      } else {
-          	this.className = "menu burger-to-right";
-	      }
-      });
-    </script> {% endcomment %}
+          var burger_class = this.className;
+          if (burger_class === "menu burger-to-right") {
+              this.className = "menu burger-to-left";
+          } else {
+              this.className = "menu burger-to-right";
+          }
+        });
+      </script> {% endcomment %}
   </body>
 </html>

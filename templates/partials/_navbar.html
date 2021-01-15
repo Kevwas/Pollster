@@ -23,6 +23,17 @@
 			<strong>POLLSTER</strong>
 		</a>
 	{% else %}
+		<a class="navbar-brand text-light ml-3 mr-4" href="{% url 'polls:index' %}"
+			style="
+				background: #007bff;
+				background: linear-gradient(to right, #3573c4, #33AEFF);
+				border: 1px solid black;
+				padding: 7px;
+				border-radius: 7px;
+			"
+		>
+			<strong>POLLSTER</strong>
+		</a>
 		{% include 'partials/_burger_button.html' %}
 	{% endif %}
 
@@ -75,8 +86,14 @@
 		var currentScrollPos = window.pageYOffset;
 		if (prevScrollpos > currentScrollPos) {
 			document.querySelector(".navbar").style.top = "0";
+			if (document.getElementById("user-image")) {
+				document.getElementById("user-image").style.marginTop = "80px";
+			}
 		} else {
 			document.querySelector(".navbar").style.top = "-80px";
+			if (document.getElementById("user-image")) {
+				document.getElementById("user-image").style.marginTop = "0";
+			}
 		}
 		prevScrollpos = currentScrollPos;
 	}
