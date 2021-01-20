@@ -1,47 +1,49 @@
 {% extends 'base.html' %} 
 {% load static %}
 {% block content %} 
-  <h1 class="text-center mb-3 mt-5 text-light">Dashboard</h1>
-  <p class="text-center mb-3 lead text-light">Polls Made</p>
-  <form class="d-flex m-4 mx-auto">
-		<input id="search-input" onkeyup="filterQuestions()" class="form-control me-2" type="search" placeholder="Filter Polls" aria-label="Search">
-		{% comment %} <button class="btn btn-outline-info ml-2" type="submit">Search</button> {% endcomment %}
-	</form>
-  {% if latest_question_list %}
-    <div id="questions-container">
-      {% for question in latest_question_list %}
-          <div class="card mb-3 question-card" style="background-color: white">
-            <div class="card-body">
-              <p class="lead question-text">{{ question.question_text }}</p>
-              <p>Published date:  <span class="pub-date">{{ question.pub_date }}</span></p>
-              <a href="{% url 'polls:results' question.id %}" class="btn btn-dark btn-sm">Results</a>
+  <div class="col-sm-9 col-md-9 col-lg-9 mx-auto pt-4" style="min-width: 350px;">
+    <h1 class="text-center mb-3 mt-5 text-light">Dashboard</h1>
+    <p class="text-center mb-3 lead text-light">Polls Made</p>
+    <form class="d-flex m-4 mx-auto">
+      <input id="search-input" onkeyup="filterQuestions()" class="form-control me-2" type="search" placeholder="Filter Polls" aria-label="Search">
+      {% comment %} <button class="btn btn-outline-info ml-2" type="submit">Search</button> {% endcomment %}
+    </form>
+    {% if latest_question_list %}
+      <div id="questions-container">
+        {% for question in latest_question_list %}
+            <div class="card mb-3 question-card" style="background-color: white">
+              <div class="card-body">
+                <p class="lead question-text">{{ question.question_text }}</p>
+                <p>Published date:  <span class="pub-date">{{ question.pub_date }}</span></p>
+                <a href="{% url 'polls:results' question.id %}" class="btn btn-dark btn-sm">Results</a>
+              </div>
             </div>
-          </div>
-      {% endfor %}
-    </div>
-    {% comment %} {% if not '/polls/all/' in request.path %}
-      <div style="display: flex; width: 100%; justify-content: center">
-        {% if page > 0 %}
-          <a id="back" href="" class="btn btn-dark m-2"><i class="fa fa-arrow-left"></i></a>
-          {% if latest_question_list.count == 10 %}
-            <a id="next" href="" class="btn  btn-dark m-2"><i class="fa fa-arrow-right"></i></a> 
-          {% endif %}
-        {% endif %}
+        {% endfor %}
       </div>
-      <a href="{% url 'polls:all' %}" style="text-decoration: none">
-        <button type="button" class="btn btn-secondary btn-lg btn-block mt-2">
-          Load all polls
-        </button>
-      </a>
-    {% endif %}     {% endcomment %}
-  {% else %}
-    <p class="h4 text-light text-center m-5">
-      No polls are available.
+      {% comment %} {% if not '/polls/all/' in request.path %}
+        <div style="display: flex; width: 100%; justify-content: center">
+          {% if page > 0 %}
+            <a id="back" href="" class="btn btn-dark m-2"><i class="fa fa-arrow-left"></i></a>
+            {% if latest_question_list.count == 10 %}
+              <a id="next" href="" class="btn  btn-dark m-2"><i class="fa fa-arrow-right"></i></a> 
+            {% endif %}
+          {% endif %}
+        </div>
+        <a href="{% url 'polls:all' %}" style="text-decoration: none">
+          <button type="button" class="btn btn-secondary btn-lg btn-block mt-2">
+            Load all polls
+          </button>
+        </a>
+      {% endif %}     {% endcomment %}
+    {% else %}
+      <p class="h4 text-light text-center m-5">
+        Yoy haven't done or created any polls yet.
+      </p>
+    {% endif %}
+    <p id="no-found-text" class="h4 text-light text-center m-5">
     </p>
-  {% endif %}
-  <p id="no-found-text" class="h4 text-light text-center m-5">
-  </p>
-  <div style="height: 60px"></div>
+    <div style="height: 60px"></div>
+  </div>
   {% comment %} {% if not '/polls/all/' in request.path %}
     <script>
       page = "{{ page|escapejs }}";

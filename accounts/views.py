@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import CreateUserForm, UserProfileForm
 from .decorators import unauthenticated_user
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 from django.urls import reverse
@@ -47,6 +48,11 @@ def loginView(request):
             messages.error(request, 'Incorrect Credentials')
     context = {}
     return render(request, 'accounts/login.html', context)
+
+@login_required
+def ProfileView(request, username):
+    context = {}
+    return render(request, 'accounts/profile.html', context)
 
 def logoutUser(request):    
     logout(request)

@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'phonenumber_field',
     'accounts.apps.AccountsConfig',
     'polls.apps.PollsConfig',
     'django.contrib.admin',
@@ -141,3 +142,5 @@ EMAIL_HOST_USER = 'arizakevin.dev@gmail.com'
 EMAIL_HOST_PASSWORD = 'Vkpwcassc3141592'
 
 # Set the data above to an .env file for production
+
+LOGIN_URL = '/login/'

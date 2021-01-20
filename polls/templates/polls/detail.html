@@ -1,40 +1,43 @@
 {% extends 'base.html' %}
 {% block content %}
 
-{% comment %} <a style="background-color: white" class="btn btn-sm mb-3 mt-5" href="{% url 'polls:polls' %}">Back To Polls</a> {% endcomment %}
-<h1 class="text-center mb-3 mt-5" style="color: white">{{ question.question_text }}</h1>
-<p class="text-center mb-3" style="color: white"><strong>Published date: {{ question.pub_date }}</strong></p>
+  <div class="col-sm-9 col-md-9 col-lg-9 mx-auto pt-4" style="min-width: 350px;">
+    {% comment %} <a style="background-color: white" class="btn btn-sm mb-3 mt-5" href="{% url 'polls:polls' %}">Back To Polls</a> {% endcomment %}
+    <h1 class="text-center mb-3 mt-5" style="color: white">{{ question.question_text }}</h1>
+    <p class="text-center mb-3" style="color: white"><strong>Published date: {{ question.pub_date }}</strong></p>
 
-{% if error_message %}
-<p class="alert alert-danger">
-	<strong>{{ error_message }}</strong>
-</p>
-{% endif %}
+    {% if error_message %}
+    <p class="alert alert-danger">
+      <strong>{{ error_message }}</strong>
+    </p>
+    {% endif %}
 
-<form action="{% url 'polls:vote' question.id %}" style="padding: 10px" method="post">
-	{% csrf_token %} 
-	{% for choice in question.choice_set.all %}
-		<div class="form-check">
-			<input
-				type="radio"
-				name="choice"
-				class="form-check-input"
-				id="choice{{ forloop.counter }}"
-				value="{{ choice.id }}"
-			/>
-			<label class="h5 text-light" for="choice{{ forloop.counter }}">
-        {{ choice.choice_text }}
-      </label>
-		</div>
-	{% endfor %}
-	<input type="submit" value="Vote" class="btn btn-dark btn-lg btn-block mt-4" />
-</form>
-{% if question.description_text %}
-<div class="jumbotron jumbotron-fluid" style="margin-top: 20px; padding: 30px">
-  <p class="lead">{{ question.description_text }}</p>
-</div>
-{% endif %}
-<div style="height: 60px"></div>
+    <form action="{% url 'polls:vote' question.id %}" style="padding: 10px" method="post">
+      {% csrf_token %} 
+      {% for choice in question.choice_set.all %}
+        <div class="form-check">
+          <input
+            type="radio"
+            name="choice"
+            class="form-check-input"
+            id="choice{{ forloop.counter }}"
+            value="{{ choice.id }}"
+          />
+          <label class="h5 text-light" for="choice{{ forloop.counter }}">
+            {{ choice.choice_text }}
+          </label>
+        </div>
+      {% endfor %}
+      <input type="submit" value="Vote" class="btn btn-dark btn-lg btn-block mt-4" />
+    </form>
+    {% if question.description_text %}
+    <div class="jumbotron jumbotron-fluid" style="margin-top: 20px; padding: 30px">
+      <p class="lead">{{ question.description_text }}</p>
+    </div>
+    {% endif %}
+    <div style="height: 60px"></div>
+  </div>
+  
 {% endblock %}
 
 {% comment %} <!DOCTYPE html>

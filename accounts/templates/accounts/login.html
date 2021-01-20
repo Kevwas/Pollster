@@ -6,8 +6,6 @@
         --input-padding-y: .75rem;
     }
 
-    
-
     .card-signin {
         border: 0;
         border-radius: 1rem;
@@ -137,7 +135,7 @@
 </style>
 <div class="container">
     <div class="row">
-      <div class="col-sm-9 col-md-9 col-lg-7 mx-auto">
+      <div class="col-sm-5 col-md-5 col-lg-5 mx-auto mt-5" style="min-width: 350px;">
         <div class="card card-signin my-5">
             <div class="card-body">
                 <h5 class="card-title text-center">Login</h5>
@@ -187,7 +185,7 @@
 
                     <div class="mt-4">
                         <div class="d-flex justify-content-center links">
-                            Don't have an account? <a href="{% url 'accounts:register' %}" class="ml-2">Sign Up</a>
+                            Don't have an account? <a href="{% url 'accounts:register' %}" class="ml-2 text-nowrap">Sign Up</a>
                         </div>
                     </div>
                 </form>

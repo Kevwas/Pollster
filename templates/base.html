@@ -101,12 +101,10 @@
       <div id="particles-js" class="fixed-bg"></div>
       <div id="page-content-wrapper">
         {% include 'partials/_navbar.html' %}
-        <div class="container" id="main-container">
-          <div class="row">
-            <div class="col-md-8 p-5 m-auto">
+        <div class="container col-12 d-flex justify-content-center" id="main-container">
+            <div class="col-12 p-4">
               {% block content %}{% endblock %}
             </div>
-          </div>
         </div>
       </div>
     </div>

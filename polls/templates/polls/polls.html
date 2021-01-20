@@ -1,57 +1,59 @@
 {% extends 'base.html' %} 
 {% load static %}
 {% block content %} 
-  <h1 class="text-center mb-3 mt-5" style="color: white">Poll Questions</h1>
-  <form class="d-flex m-4 mx-auto">
-		<input id="search-input" onkeyup="filterQuestions()" class="form-control me-2" type="search" placeholder="Filter Polls" aria-label="Search">
-		{% comment %} <button class="btn btn-outline-info ml-2" type="submit">Search</button> {% endcomment %}
-	</form>
-  {% if latest_question_list %}
-    <div id="questions-container">
-      {% for question in latest_question_list %}
-          <div class="card mb-3 question-card" style="background-color: white">
-            <div class="card-body">
-              <p class="lead question-text">{{ question.question_text }}</p>
-              <p>Published date:  <span class="pub-date">{{ question.pub_date }}</span></p>
-              <div style="display: flex; align-items: center; flex-direction: row;">
-                {% if request.user.is_authenticated %}
-                  {% if question.id not in polls_made %}
-                    <a href="{% url 'polls:detail' question.id %}" class="btn btn-primary btn-sm mr-2">Vote Now</a>
+  <div class="col-sm-9 col-md-9 col-lg-9 mx-auto pt-4" style="min-width: 350px;">
+    <h1 class="text-center mb-3 mt-5" style="color: white">Poll Questions</h1>
+    <form class="d-flex m-4 mx-auto">
+      <input id="search-input" onkeyup="filterQuestions()" class="form-control me-2" type="search" placeholder="Filter Polls" aria-label="Search">
+      {% comment %} <button class="btn btn-outline-info ml-2" type="submit">Search</button> {% endcomment %}
+    </form>
+    {% if latest_question_list %}
+      <div id="questions-container">
+        {% for question in latest_question_list %}
+            <div class="card mb-3 question-card" style="background-color: white">
+              <div class="card-body">
+                <p class="lead question-text">{{ question.question_text }}</p>
+                <p>Published date:  <span class="pub-date">{{ question.pub_date }}</span></p>
+                <div style="display: flex; align-items: center; flex-direction: row;">
+                  {% if request.user.is_authenticated %}
+                    {% if question.id not in polls_made %}
+                      <a href="{% url 'polls:detail' question.id %}" class="btn btn-primary btn-sm mr-2">Vote Now</a>
+                    {% else %}
+                      <a class="text-success mr-auto" style="margin-bottom: -15px">Already voted</p>
+                    {% endif %}
                   {% else %}
-                    <a class="text-success mr-auto" style="margin-bottom: -15px">Already voted</p>
+                    <a href="{% url 'polls:detail' question.id %}" class="btn btn-primary btn-sm mr-2">Vote Now</a>
                   {% endif %}
-                {% else %}
-                  <a href="{% url 'polls:detail' question.id %}" class="btn btn-primary btn-sm mr-2">Vote Now</a>
-                {% endif %}
-                <a href="{% url 'polls:results' question.id %}" class="btn btn-dark btn-sm">Results</a>
+                  <a href="{% url 'polls:results' question.id %}" class="btn btn-dark btn-sm">Results</a>
+                </div>
               </div>
             </div>
-          </div>
-      {% endfor %}
-    </div>
-    {% if not '/polls/all/' in request.path %}
-      <div style="display: flex; width: 100%; justify-content: center">
-        {% if page > 0 %}
-          <a id="back" href="" class="btn btn-dark m-2"><i class="fa fa-arrow-left"></i></a>
-          {% if latest_question_list.count == 10 %}
-            <a id="next" href="" class="btn  btn-dark m-2"><i class="fa fa-arrow-right"></i></a> 
-          {% endif %}
-        {% endif %}
+        {% endfor %}
       </div>
-      <a href="{% url 'polls:all' %}" style="text-decoration: none">
-        <button type="button" class="btn btn-secondary btn-lg btn-block mt-2">
-          Load all polls
-        </button>
-      </a>
-    {% endif %}    
-  {% else %}
-    <p class="h4 text-light text-center m-5">
-      No polls are available.
+      {% if not '/polls/all/' in request.path %}
+        <div style="display: flex; width: 100%; justify-content: center">
+          {% if page > 0 %}
+            <a id="back" href="" class="btn btn-dark m-2"><i class="fa fa-arrow-left"></i></a>
+            {% if latest_question_list.count == 10 %}
+              <a id="next" href="" class="btn  btn-dark m-2"><i class="fa fa-arrow-right"></i></a> 
+            {% endif %}
+          {% endif %}
+        </div>
+        <a href="{% url 'polls:all' %}" style="text-decoration: none">
+          <button type="button" class="btn btn-secondary btn-lg btn-block mt-2">
+            Load all polls
+          </button>
+        </a>
+      {% endif %}    
+    {% else %}
+      <p class="h4 text-light text-center m-5">
+        No polls are available.
+      </p>
+    {% endif %}
+    <p id="no-found-text" class="h4 text-light text-center m-5">
     </p>
-  {% endif %}
-  <p id="no-found-text" class="h4 text-light text-center m-5">
-  </p>
-  <div style="height: 60px"></div>
+    <div style="height: 60px"></div>
+  </div>
   {% if not '/polls/all/' in request.path %}
     <script>
       page = "{{ page|escapejs }}";

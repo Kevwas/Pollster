@@ -94,13 +94,16 @@
 		-webkit-transition-delay: 0s, 0.2s; transition-delay: 0s, 0.2s;
 	}
 </style>
+
 <div id="menu-toggle" class="menu burger-to-left"><span></span></div>
+
 <script>
 	var menu_toggle = document.getElementById("menu-toggle");
 	var wrapper = document.getElementById('wrapper');
 	var sidebar_wrapper = document.getElementById('sidebar-wrapper');
 	var margin_left, margin_left_num;
 	var questions_container = document.getElementById('question-container');
+	var main_container_displacement = "7.5rem";
 
 	menu_toggle.addEventListener("click", (e) => {
 		e.preventDefault();
@@ -111,11 +114,11 @@
 		if (margin_left_num < 0 ) {
 			menu_toggle.className = "menu burger-to-left";
 			if (window.innerWidth > 829) {
-				document.getElementById("main-container").style.marginLeft = "15rem";
+				document.getElementById("main-container").style.marginLeft = main_container_displacement;
 			}
 		} else {
 			menu_toggle.className = "menu burger-to-right";
-			document.getElementById("main-container").style.marginLeft = "auto";
+			document.getElementById("main-container").style.marginLeft = "0";
 		}
 	}); 
 
@@ -130,13 +133,13 @@
 			}
 			menu_toggle.className = "menu burger-to-left";
 			if (window.innerWidth > 829) {
-				document.getElementById("main-container").style.marginLeft = "15rem";
+				document.getElementById("main-container").style.marginLeft = main_container_displacement;
 			}
 		} else {
 			//console.log("Less than 768");
 			if (wrapper.className === "d-flex") {
 				menu_toggle.className = "menu burger-to-right";
-				document.getElementById("main-container").style.marginLeft = "auto";
+				document.getElementById("main-container").style.marginLeft = "0";
 			}
 		}
 		//console.log("window resized!");
@@ -154,12 +157,12 @@
 
 		if (margin_left_num < 0) {
 			menu_toggle.className = "menu burger-to-right";
-			document.getElementById("main-container").style.marginLeft = "auto";
+			document.getElementById("main-container").style.marginLeft = "0";
 			//console.log("set burger button to right");
 		} else {
 			menu_toggle.className = "menu burger-to-left";
 			if (window.innerWidth > 829) {
-				document.getElementById("main-container").style.marginLeft = "15rem";
+				document.getElementById("main-container").style.marginLeft = main_container_displacement;
 			}
 			//console.log("set burger button to left");
 		}

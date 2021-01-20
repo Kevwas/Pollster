@@ -39,7 +39,7 @@
             <a href="{% url 'polls:dashboard'%}" class="list-group-item list-group-item-action bg-light">Dashboard</a>
             <a href="{% url 'polls:polls' page=1 %}" class="list-group-item list-group-item-action bg-light">Polls</a>
             <a href="#" class="list-group-item list-group-item-action bg-light">Settings</a>
-            <a href="#" class="list-group-item list-group-item-action bg-light">Profile</a>
+            <a href="{% url 'accounts:profile' username=request.user.username %}" class="list-group-item list-group-item-action bg-light">Profile</a>
 			<a class="navbar-text list-group-item list-group-item-action bg-light text-info" style="text-decoration: none" href="{% url 'accounts:logout' %}"><strong>Logout</strong></a>
         </div>
     </div>
