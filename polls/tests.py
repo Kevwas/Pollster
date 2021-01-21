@@ -90,8 +90,7 @@ class ExampleGetTest(TestCase):
 
 class UserCreationAndLoginTest(TestCase):
     def setUp(self):
-        user = create_temporary_user_to_login(self)
-        user_profile = UserProfile.objects.create(user=user, identification=123456789)
+        self.user = create_temporary_user_to_login(self)
 
     def test_secure_page(self):
         response = self.client.get(reverse('polls:all'))
@@ -139,7 +138,7 @@ class QuestionDetailViewTests(TestCase):
 
 class QuestionResultsViewTests(TestCase):
     def setUp(self):
-        create_temporary_user_to_login(self)
+        self.user = create_temporary_user_to_login(self)
 
     def test_future_question(self):
         """
@@ -178,8 +177,8 @@ class QuestionResultsViewTests(TestCase):
 
 class QuestionPollsViewTests(TestCase):
     def setUp(self):
-        user = create_temporary_user_to_login(self)
-        user_profile = UserProfile.objects.create(user=user, identification=123456789)
+        self.user = create_temporary_user_to_login(self)
+        # user_profile = UserProfile.objects.create(user=user, identification=123456789)
 
     def test_no_questions(self):
         """
@@ -317,7 +316,7 @@ class DashboardViewTest(TestCase):
 
     def test_dashboard_view_with_user_authenticated(self):
         user = create_temporary_user_to_login(self)
-        user_profile = UserProfile.objects.create(user=user, identification=123456789)
+        # user_profile = UserProfile.objects.create(user=user, identification=123456789)
         response = self.client.get(reverse('polls:dashboard'))
         self.assertEqual(response.status_code, 200)
 
@@ -330,7 +329,7 @@ class UserPagesRestrictionsTests(TestCase):
 
     def test_polls_view(self):
         user = create_temporary_user_to_login(self)
-        user_profile = UserProfile.objects.create(user=user, identification=123456789)
+        # user_profile = UserProfile.objects.create(user=user, identification=123456789)
         url = reverse('polls:polls', args=(1,))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -357,8 +356,7 @@ class UserPagesRestrictionsTests(TestCase):
 
 class UserVotingTests(TestCase):
     def setUp(self):
-        user = create_temporary_user_to_login(self)
-        user_profile = UserProfile.objects.create(user=user, identification=123456789)
+        self.user = create_temporary_user_to_login(self)
 
     def test_voting_without_selecting_a_choice(self):
         question = create_question_with_choices(question_text="Random Question.",
@@ -384,7 +382,7 @@ class UserVotingTests(TestCase):
         question = create_question_with_choices(question_text="Random Question.",
                                      days=0, choices=3)
         choice_id = question.choice_set.all()[0].id
-        profile = UserProfile.objects.get(identification=123456789)
+        profile = self.user.userprofile
         profile.set_polls_made(question.id)
         profile.save()
         response = self.client.post(reverse('polls:vote', args=(question.id,)), {'choice': choice_id})

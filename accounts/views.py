@@ -13,21 +13,42 @@ from django.contrib.auth import authenticate, login, logout
 # Create your views here.
 @unauthenticated_user
 def registerView(request):
+    print(request)
     if request.method == 'POST':
+        print("POST")
         form = CreateUserForm(request.POST)
         profile_form = UserProfileForm(request.POST)
-
         if form.is_valid() and profile_form.is_valid():
-            user = form.save()
+            # user = form.save()
             
-            profile = profile_form.save(commit=False)
-            profile.user = user
+            # profile = profile_form.save(commit=False)
+            # profile.user = user
 
-            profile.save()
+            # profile.save()
+
+            profile = profile_form.save()
+            
+            user = form.save(commit=False)
+            user.profile = profile
+
+            user.save()
 
             username = form.cleaned_data.get('username')
+            # Clear all messages
+            system_messages = messages.get_messages(request)
+            for message in system_messages:
+                # This iteration is necessary
+                pass
+            # Messages cleared.
+
+            # Send success message
             messages.success(request, 'Account was created for ' + username)
             return redirect(reverse('accounts:login'))
+        else:
+            messages.error(request, {
+                'form': form,
+                'profile_form': profile_form,
+            })
     else:
         form = CreateUserForm()
         profile_form = UserProfileForm()

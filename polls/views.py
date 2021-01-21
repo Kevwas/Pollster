@@ -4,19 +4,11 @@ from django.urls import reverse
 from django.db.models import F, Q, Count
 from django.views import generic
 from django.utils import timezone
-
 from django.contrib.auth.decorators import login_required
-
 from django.contrib.auth.mixins import LoginRequiredMixin
-
 # from django.template import loader
-
 from .models import Question, Choice
-
 from django.contrib.auth.models import User
-
-from accounts.models import UserProfile
-
 import json
 
 
@@ -51,7 +43,7 @@ class PollsView(generic.ListView):
         context['page'] = int(page)
 
         if self.request.user.is_authenticated:
-            user_profile = UserProfile.objects.get(id=self.request.user.id)
+            user_profile = self.request.user.userprofile
             polls_made = json.loads(user_profile.polls_made)
             context['polls_made'] = polls_made
         return context
@@ -80,7 +72,7 @@ class AllPollsView(generic.ListView):
         context = super().get_context_data(**kwargs)
 
         if self.request.user.is_authenticated:
-            user_profile = UserProfile.objects.get(id=self.request.user.id)
+            user_profile = self.request.user.userprofile
             polls_made = json.loads(user_profile.polls_made)
             context['polls_made'] = polls_made
         return context
@@ -133,7 +125,7 @@ class ResultsView(generic.DetailView):
 
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
-    user_profile = UserProfile.objects.get(user=request.user)
+    user_profile = request.user.userprofile
     polls_made = user_profile.get_polls_made()
     if question_id in polls_made:
         # Redirect to the polls
@@ -174,7 +166,7 @@ class DashboardView(LoginRequiredMixin, generic.ListView):
         Excludes any questions that aren't published yet
         and those with less than 2 choices.
         """
-        user_profile = UserProfile.objects.get(id=self.request.user.id)
+        user_profile = self.request.user.userprofile
         polls_made = json.loads(user_profile.polls_made)
 
         questions = Question.objects.exclude(

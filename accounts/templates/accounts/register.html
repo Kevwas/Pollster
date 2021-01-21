@@ -138,6 +138,9 @@
         }
     }
 
+    .bg-danger {
+        opacity: 0.5;
+    }
 </style>
 
 <div class="container">
@@ -149,55 +152,79 @@
                     <form class="form-signin" method="POST" action="">
                         {% csrf_token %}
                         <div class="form-label-group">
-                            <input type="text" id="inputUsername" class="form-control" placeholder="Name" name="username" required autofocus>
-                            <label for="inputUsername">Username</label>
+                            <input type="text" id="inputUsername" class="form-control {% if form.errors.username %} bg-danger {% endif %}" placeholder="Name" name="username" required
+                            {% if form.errors.username or not form.errors and not profile_form.errors %} autofocus {% endif %}>
+                            <label for="inputUsername" {% if form.errors.username %} class="text-light" {% endif %}>Username</label>
+                        </div>
+                        <div class="links text-danger">
+                            {{form.errors.username}}
                         </div>
 
                         <div class="form-label-group">
-                            <input type="text" id="inputName" class="form-control" placeholder="Name" name="first_name" required>
-                            <label for="inputName">Name</label>
+                            <input type="text" id="inputName" class="form-control {% if form.errors.first_name %} bg-danger {% endif %}" placeholder="Name" name="first_name" required>
+                            <label for="inputName" {% if form.errors.first_name %} class="text-light" {% endif %}>Name</label>
+                        </div>
+                        <div class="links text-danger">
+                            {{form.errors.first_name}}
                         </div>
 
                         <div class="form-label-group">
-                            <input type="text" id="inputLastname" class="form-control" placeholder="Lastname" name="last_name" required>
-                            <label for="inputLastname">Lastname</label>
+                            <input type="text" id="inputLastname" class="form-control {% if form.errors.last_name %} bg-danger {% endif %}" placeholder="Lastname" name="last_name" required>
+                            <label for="inputLastname" {% if form.errors.last_name %} class="text-light" {% endif %}>Lastname</label>
+                        </div>
+                        <div class="links text-danger">
+                            {{form.errors.last_name}}
                         </div>
 
                         <div class="form-label-group">
-                            <input type="number" id="inputID" class="form-control" placeholder="ID" name="identification" required>
-                            <label for="inputID">Identification</label>
+                            <input type="number" id="inputID" class="form-control {% if profile_form.errors.identification %} bg-danger {% endif %}" placeholder="ID" name="identification" required>
+                            <label for="inputID" {% if profile_form.errors.identification %} class="text-light" {% endif %}>Identification</label>
                         </div>
-
-                        {% comment %} <div class="form-label-group">
-                            <input type="number" id="inputAge" class="form-control" placeholder="Age" name="age" required>
-                            <label for="inputAge">Age</label>
-                        </div>
-
-                        <div class="form-label-group">
-                            <input type="number" id="inputLocation" class="form-control" placeholder="Location" name="location" required>
-                            <label for="inputLocation">Location</label>
-                        </div> {% endcomment %}
-
-                        <div class="form-label-group">
-                            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" name="email" required>
-                            <label for="inputEmail">Email address</label>
+                        <div class="links text-danger">
+                            {{profile_form.errors.identification}}
                         </div>
 
                         <div class="form-label-group">
-                            <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password1" required>
-                            <label for="inputPassword">Password</label>
+                            <input type="text" id="inputLocation" class="form-control {% if profile_form.errors.location %} bg-danger {% endif %}" placeholder="Location" name="location" required>
+                            <label for="inputLocation" {% if profile_form.errors.location %} class="text-light" {% endif %}>Location</label>
+                        </div>
+                        <div class="links text-danger">
+                            {{profile_form.errors.location}}
                         </div>
 
                         <div class="form-label-group">
-                            <input type="password" id="inputConfirmPassword" class="form-control" placeholder="Password confirmation" name="password2" required>
-                            <label for="inputConfirmPassword">Password Confirmation</label>
+                            <input type="text" id="inputPhone" class="form-control {% if profile_form.errors.phone %} bg-danger {% endif %}" placeholder="Phone" name="phone" required>
+                            <label for="inputPhone" {% if profile_form.errors.phone %} class="text-light" {% endif %}>Phone</label>
+                        </div>
+                        <div class="links text-danger">
+                            {{profile_form.errors.phone}}
                         </div>
 
-                        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Register</button> 
-
-                        <div class="d-flex justify-content-center links text-danger">
-                            {{form.errors}}
+                        <div class="form-label-group">
+                            <input type="email" id="inputEmail" class="form-control {% if form.errors.email %} bg-danger {% endif %}" placeholder="Email address" name="email" required>
+                            <label for="inputEmail" {% if form.errors.email %} class="text-light" {% endif %}>Email address</label>
                         </div>
+                        <div class="links text-danger">
+                            {{form.errors.email}}
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="password" id="inputPassword" class="form-control {% if form.errors.password1 %} bg-danger {% endif %}" placeholder="Password" name="password1" required>
+                            <label for="inputPassword" {% if form.errors.password1 %} class="text-light" {% endif %}>Password</label>
+                        </div>
+                        <div class="links text-danger">
+                            {{form.errors.password1}}
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="password" id="inputConfirmPassword" class="form-control {% if form.errors.password2 %} bg-danger {% endif %}" placeholder="Password confirmation" name="password2" required>
+                            <label for="inputConfirmPassword" {% if form.errors.password2 %} class="text-light" {% endif %}>Password Confirmation</label>
+                        </div>
+                        <div class="links text-danger">
+                            {{form.errors.password2}}
+                        </div>
+
+                        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="SUBMIT">Register</button> 
 
                         <div class="mt-4">
                             <div class="d-flex justify-content-center links">
@@ -225,6 +252,8 @@
 	for (var field in form_fields){	
 		form_fields[field].className += ' form-control'
 	}
+
+    document.querySelector(".bg-danger").focus();
 </script>
 
 
