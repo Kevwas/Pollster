@@ -7,7 +7,7 @@
     <p class="text-center mb-3" style="color: white"><strong>Published date: {{ question.pub_date }}</strong></p>
 
     {% if error_message %}
-    <p class="alert alert-danger">
+    <p id="alert-message" class="alert alert-danger">
       <strong>{{ error_message }}</strong>
     </p>
     {% endif %}
@@ -37,6 +37,19 @@
     {% endif %}
     <div style="height: 60px"></div>
   </div>
+  <script type="text/javascript">
+
+        if (document.getElementById("alert-message")) {
+            document.addEventListener("DOMContentLoaded", JSalert);
+        }
+        
+        function JSalert(){
+            //swal("Congrats!", ", Your account is created!", "success");
+            var message = document.getElementById("alert-message");
+            swal("Hey!", message.innerText , "warning");
+            message.style.display = "none";
+        }   
+    </script>
   
 {% endblock %}
 

@@ -14,3 +14,9 @@ class UserProfileForm(ModelForm):
     class Meta:
         model = UserProfile
         fields = ('identification', 'phone', 'location',)
+
+class UserProfileExtraInfoForm(ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ('profile_pic', 'phone', 'location',)
+        # fields = '__all__'

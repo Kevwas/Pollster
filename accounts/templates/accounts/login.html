@@ -165,7 +165,7 @@
                             {% for message in messages %}
                                 <div class="mt-4">
                                     <div class="d-flex justify-content-center links">
-                                        <p id="messages" 
+                                        <p id="success-message" 
                                             {% if message.tags == "success" %} 
                                                 class="text-success" 
                                             {% elif message.tags == "error" %}
@@ -190,5 +190,17 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        if (document.getElementById("success-message")) {
+            document.addEventListener("DOMContentLoaded", JSalert);
+        }
+        
+        function JSalert(){
+            //swal("Congrats!", ", Your account is created!", "success");
+            var message = document.getElementById("success-message");
+            swal("Success!", message.innerText , "success");
+            message.style.display = "none";
+        }   
+    </script>
 
 {% endblock %}

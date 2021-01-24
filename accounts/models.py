@@ -13,10 +13,11 @@ class UserProfile(models.Model):
     identification = models.IntegerField(null=True, blank=True, unique=True)
     location = models.TextField(max_length=200, null=True, blank=True)
     phone = PhoneNumberField(null=True, blank=True)
-    profile_pic = models.ImageField(null=True, blank=True, default='')
+    profile_pic = models.ImageField(null=True, blank=True, default='user.png')
     followers = models.IntegerField(default=0)
     following = models.IntegerField(default=0)
     stars = models.IntegerField(default=0)
+    
 
     def set_polls_made(self, poll):
         loaded_polls = self.get_polls_made()
@@ -42,7 +43,7 @@ class UserProfile(models.Model):
 
 
     def __str__(self):
-        return str(self.user.username)
+        return str(self.user)
 
 
 # class User(AbstractUser):
