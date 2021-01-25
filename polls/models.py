@@ -2,11 +2,12 @@ import datetime
 
 from django.db import models
 from django.utils import timezone
-
+from django.contrib.auth.models import User
 # Create your models here.
 
 
 class Question(models.Model):
+    creator = models.OneToOneField(User, on_delete=models.DO_NOTHING, null=True, blank=True)
     question_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
     description_text = models.TextField('brief description')
@@ -24,6 +25,7 @@ class Question(models.Model):
 
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    creator = models.OneToOneField(User, on_delete=models.DO_NOTHING, null=True, blank=True)
     choice_text = models.CharField(max_length=100)
     votes = models.IntegerField(default=0)
 

@@ -16,7 +16,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <style>
       body {
           background: #007bff;
@@ -41,6 +41,10 @@
         background-attachment: fixed;
         z-index:-1;
       }
+
+      ul{
+        list-style-type: none;
+      }
     </style>
     <style>
       #wrapper {
@@ -56,7 +60,8 @@
         transition: margin .25s ease-out;
         position: fixed;
         top: 0;
-    		z-index: 999;
+
+    		z-index: 990;
         -webkit-box-shadow: 6px 8px 30px -10px #333;
         -moz-box-shadow: 6px 8px 30px -10px #333;
         box-shadow: 6px 8px 30px -10px #333;
@@ -106,7 +111,7 @@
       <div id="page-content-wrapper">
         {% include 'partials/_navbar.html' %}
         <div class="container col-12 d-flex justify-content-center" id="main-container">
-            <div class="col-12 p-4">
+            <div class="col-12 p-5">
               {% block content %}{% endblock %}
             </div>
         </div>
@@ -121,24 +126,121 @@
           //console.log('callback - particles.js config loaded');
       });
     </script>
+    <script>
+      // NAVBAR SCRIPT
+    	var prevScrollpos = window.pageYOffset;
+    	console.log(prevScrollpos);
+    	window.onscroll = function(e) {
+    		e.preventDefault();
+    		var currentScrollPos = window.pageYOffset;
+    		if (prevScrollpos > currentScrollPos) {
+    			document.querySelector(".navbar").style.top = "0";
+    			if (document.getElementById("user-image")) {
+    				document.getElementById("user-image").style.marginTop = "80px";
+    			}
+    		} else {
+    			document.querySelector(".navbar").style.top = "-80px";
+    			if (document.getElementById("user-image")) {
+    				document.getElementById("user-image").style.marginTop = "0";
+    			}
+    		}
+    		prevScrollpos = currentScrollPos;
+    	}
+    </script>
+    <script>
+      // SIDEBAR SCRIPT
+      var menu_toggle = document.getElementById("menu-toggle");
+      var wrapper = document.getElementById('wrapper');
+      var sidebar_wrapper = document.getElementById('sidebar-wrapper');
+      var margin_left, margin_left_num;
+      var questions_container = document.getElementById('question-container');
+      var main_container_displacement = "7.5rem";
 
+      menu_toggle.addEventListener("click", (e) => {
+        e.preventDefault();
+        wrapper.classList.toggle("toggled");
+        margin_left = window.getComputedStyle(sidebar_wrapper).marginLeft;
+        margin_left_num = parseFloat(margin_left);
+
+        if (margin_left_num < 0 ) {
+          menu_toggle.className = "menu burger-to-left";
+          if (window.innerWidth > 829) {
+            document.getElementById("main-container").style.marginLeft = main_container_displacement;
+          }
+        } else {
+          menu_toggle.className = "menu burger-to-right";
+          document.getElementById("main-container").style.marginLeft = "0";
+        }
+      }); 
+
+      // Update the burger arrow when the window resizes
+      window.addEventListener("resize",(e) => {
+        //console.log(window.innerWidth)
+        e.preventDefault();
+        if (document.documentElement.clientWidth >= 768) {
+          //console.log("Bigger or equal to 768");
+          if (wrapper.className === "d-flex toggled") {
+            wrapper.classList.toggle("toggled");
+          }
+          menu_toggle.className = "menu burger-to-left";
+          if (window.innerWidth > 829) {
+            document.getElementById("main-container").style.marginLeft = main_container_displacement;
+          }
+        } else {
+          //console.log("Less than 768");
+          if (wrapper.className === "d-flex") {
+            menu_toggle.className = "menu burger-to-right";
+            document.getElementById("main-container").style.marginLeft = "0";
+          }
+        }
+        //console.log("window resized!");
+        //console.log("NEW WINDOW WIDTH: " + document.documentElement.clientWidth);
+      }, true);
+
+      // Update the burger arrow when the window is loaded
+      window.addEventListener("load", (e) => {
+        e.preventDefault();
+        //console.log("window loaded!");
+        //console.log("WINDOW WIDTH: " + document.documentElement.clientWidth);
+        margin_left = window.getComputedStyle(sidebar_wrapper).marginLeft;
+        margin_left_num = parseFloat(margin_left);
+        //console.log("Margin Left of sidebar: " + margin_left_num);
+
+        if (margin_left_num < 0) {
+          menu_toggle.className = "menu burger-to-right";
+          document.getElementById("main-container").style.marginLeft = "0";
+          //console.log("set burger button to right");
+        } else {
+          menu_toggle.className = "menu burger-to-left";
+          if (window.innerWidth > 829) {
+            document.getElementById("main-container").style.marginLeft = main_container_displacement;
+          }
+          //console.log("set burger button to left");
+        }
+      }, true);
+    </script>
+    <script>
+      // LOGOUT SCRIPT
+      function askLogout() {
+          Swal.fire({
+              title: 'Are you sure you want to leave?',
+              showDenyButton: true,
+              confirmButtonText: `Yes`,
+              denyButtonText: `Cancel`,
+          }).then((result) => {
+              /* Read more about isConfirmed, isDenied below */
+              if (result.isConfirmed) {
+                  fetch("{% url 'accounts:logout' %}")
+                  .then(response => {
+                      window.location.href = {% url 'accounts:login' %}
+                  })
+                  .catch(err => console.log(err))
+              } 
+          });
+      }
+    </script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-      <!-- Menu Toggle Script -->
-      {% comment %} <script>
-        $("#menu-toggle").click(function(e) {
-          e.preventDefault();
-          $("#wrapper").toggleClass("toggled");
-
-          var burger_class = this.className;
-          if (burger_class === "menu burger-to-right") {
-              this.className = "menu burger-to-left";
-          } else {
-              this.className = "menu burger-to-right";
-          }
-        });
-      </script> {% endcomment %}
   </body>
 </html>

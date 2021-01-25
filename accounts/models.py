@@ -10,13 +10,14 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     polls_made = models.TextField(default='[]')
     polls_created = models.TextField(default='[]')
-    identification = models.IntegerField(null=True, blank=True, unique=True)
+    identification = models.TextField(max_length=200, null=True, blank=True, unique=True)
     location = models.TextField(max_length=200, null=True, blank=True)
     phone = PhoneNumberField(null=True, blank=True)
-    profile_pic = models.ImageField(null=True, blank=True, default='user.png')
+    profile_pic = models.ImageField(null=True, blank=True, default='user_default.png')
     followers = models.IntegerField(default=0)
     following = models.IntegerField(default=0)
     stars = models.IntegerField(default=0)
+    bio = models.TextField(max_length=500, null=True, blank=True)
     
 
     def set_polls_made(self, poll):

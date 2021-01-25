@@ -2,14 +2,26 @@
 {% block content %}
   <div class="col-sm-9 col-md-9 col-lg-9 mx-auto pt-4" style="min-width: 350px;">
     <h1 class="mb-3 mt-5 text-light text-center">{{ question.question_text }}</h1>
+    <p class="text-center mb-3" style="color: white">By:  <span class="creator"><strong>{{ question.creator }}</strong></span></p>
     <p class="text-center mb-5" style="color: white"><strong>Published date: {{ question.pub_date }}</strong></p>
+
+    {% if messages %}
+      {% for message in messages %}
+        <p id="alert-message" class="alert alert-danger">
+          <strong>{{ message }}</strong>
+        </p>
+      {% endfor %}
+    {% endif %}
 
     <ul class="list-group mb-5">
       {% for choice in question.choice_set.all %}
-      <li class="list-group-item">
-        {{ choice.choice_text }}  <span class="badge badge-success float-right">{{ choice.votes }} vote{{ choice.votes | pluralize }}</span>
-      </li>
+        <li class="list-group-item votes">
+          {{ choice.choice_text }}  <span class="badge badge-success float-right">{{ choice.votes }} vote{{ choice.votes | pluralize }}</span>
+        </li>
       {% endfor %}
+      <li class="list-group-item">
+        <strong>Total votes:</strong> <span id="total-votes" class="badge badge-info float-right"></span>
+      </li>
     </ul>
 
     <canvas id="myChart" style="padding: 30px; border-radius: 5px ;background-color: white; min-height: 300px; width: auto">
@@ -24,6 +36,8 @@
   </div>
 
   <script>
+    var total = 0;
+
     var state = {
       'items': [],
       'values': [],
@@ -43,10 +57,13 @@
 
           state.items.push(key);
           state.values.push(value)
+          total += value;
         }
 
         console.log('STATE:', state)
         buildChart(state.items, state.values)
+        console.log(total);
+        document.getElementById("total-votes").innerText = total;
       }
     })
 
@@ -84,27 +101,17 @@
         }
       });
     }
-    
+  </script>
+  <script type="text/javascript">
+      if (document.getElementById("alert-message")) {
+          document.addEventListener("DOMContentLoaded", JSalert);
+      }
+      
+      function JSalert(){
+          //swal("Congrats!", ", Your account is created!", "success");
+          var message = document.getElementById("alert-message");
+          Swal.fire(message.innerText, "", "success");
+          message.style.display = "none";
+      }   
   </script>
 {% endblock %}
-
-{% comment %} <!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Results for question {{ question.id }}</title>
-  </head>
-  <body>
-    <h1>{{ question.question_text }}</h1>
-
-    <ul>
-      {% for choice in question.choice_set.all %}
-        <li>
-          {{ choice.choice_text }} -- {{ choice.votes }} vote
-        </li>
-      {% endfor %}
-    </ul>
-
-    <a href="{% url 'polls:detail' question.id %}">Vote again?</a>
-  </body>
-</html> {% endcomment %}

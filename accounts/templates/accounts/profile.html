@@ -11,8 +11,17 @@
             padding: 6px 12px;
             cursor: pointer;
         }
+        .input-group-text {
+            min-width: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .errorlist {
+            padding: 0;
+        }
     </style>
-    <div class="container bootstrap snippet bg-light card p-5 my-5" style="width: 80%">
+    <div class="container bootstrap snippet bg-light card p-5 my-5" style="width: 80%;">
         {% for message in messages %}
             {% if message.tags == "success" %} 
                 <p id="messages" class="text-success lead">
@@ -23,26 +32,28 @@
         <form id="profile-form" class="form" method="POST" action="" enctype="multipart/form-data" id="registrationForm">
             {% csrf_token %}
             <div class="row">
-                <div class="col-sm-12 text-center pb-4"><h1>{{request.user}}</h1></div>
+                {% comment %} <div class="col-sm-12 text-center pb-4"><h1>{{request.user}}</h1></div> {% endcomment %}
+                <div class="form-group col-sm-12 text-center d-flex justify-content-center">
+                    <div class=" text-center pb-4 d-flex flex-row align-items-center">
+                        {% comment %} <label for="first_name"><h4>First name</h4></label> {% endcomment %}
+                        <input style="outline: none;" type="text" class="form-control-plaintext text-center h1" name="username" id="username" placeholder="Username">
+                        <span class="btn btn-outline-info" id="pencil"><i class="fa fa-pencil"></i></span>
+                    </div>
+                    <div class="links text-danger">
+                        {{user_form.errors.username}}
+                    </div>
+                </div>
             </div>
-            {% comment %} <form class="form" method="POST" action="" enctype="multipart/form-data" id="registrationForm">
-                {% csrf_token %}
-                <div class="row">
-                    <div class="form-group col-12 pb-4">
-                        <label for="bio"><h4>Bio</h4></label>
-                        <input type="text" class="form-control" name="bio" id="bio" placeholder="Bio" title="Enter a Bio of yourself.">
-                    </div>
+            <hr>
+            <div class="row m-1 my-4">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fa fa-book"></i></span>
+                    <textarea class="form-control" name="bio" id="bio" aria-label="With textarea" placeholder="Bio"></textarea>
                 </div>
-                <div class="row">
-                    <div class="form-group col-12 pb-4">
-                        <label for="hobbies"><h4>Hobbies</h4></label>
-                        <input type="text" class="form-control" name="hobbies" id="hobbies" placeholder="Hobbies" title="Talk about your hobbies if any.">
-                    </div>
-                </div>
-            </form> {% endcomment %}
-            <div class="row">
+            </div>
+            <div class="row pt-4">
                 <div class="col-sm-5" style="min-width: 180px;"><!--left col-->
-                    <div class="text-center">
+                    <div class="text-center d-flex flex-column justify-content-center align-items-center">
                         <img 
                             id="image"
                             src="{{ request.user.userprofile.profile_pic.url }}" 
@@ -65,78 +76,86 @@
                                 {% endif %}
                             "
                         >
+                        <div class="links text-danger" style="max-width: 200px;">
+                            {{ user_profile_form.errors.profile_pic }}
+                            {{ user_profile_form.non_field_errors }}
+                        </div>
                         <h6>Upload a different photo...</h6>
-                        <label for="profile-pic" class="custom-file-upload">
+                        <label for="profile-pic" class="custom-file-upload btn btn-outline-info">
                             Upload
                         </label>
                         <input id="profile-pic" type="FILE" name="profile_pic" onchange="previewImage();"/>
                         {% comment %} <input type="submit" name="submit" value="Submit" /> {% endcomment %}
                     </div></hr><br>
 
-                    <div class="panel panel-default pb-3">
+                    {% comment %} <div class="panel panel-default pb-3">
                         <div class="panel-heading">Website <i class="fa fa-link fa-1x"></i></div>
                         <div class="panel-body"><a href="http://bootnipets.com">bootnipets.com</a></div>
-                    </div>
+                    </div> {% endcomment %}
                     
                     <ul class="list-group pb-3">
                         <li class="list-group-item text-muted">Activity <i class="fa fa-dashboard fa-1x"></i></li>
-                        <li class="list-group-item text-right"><span class="pull-left"><strong>Shares</strong></span> 125</li>
-                        <li class="list-group-item text-right"><span class="pull-left"><strong>Likes</strong></span> 13</li>
-                        <li class="list-group-item text-right"><span class="pull-left"><strong>Your Polls</strong></span> {{ polls_made|length }}</li>
+                        {% comment %} <li class="list-group-item text-right"><span class="pull-left"><strong>Shares</strong></span> 125</li> {% endcomment %}
+                        <li class="list-group-item text-right"><span class="pull-left"><strong>Polls created</strong></span> {{ polls_created|length }}</li>
+                        <li class="list-group-item text-right"><span class="pull-left"><strong>Polls made</strong></span> {{ polls_made|length }}</li>
                         <li class="list-group-item text-right"><span class="pull-left"><strong>Followers</strong></span> {{ request.user.userprofile.followers }}</li>
-                        <li class="list-group-item text-right"><span class="pull-left"><strong>Followers</strong></span> {{ request.user.userprofile.following }}</li>
+                        <li class="list-group-item text-right"><span class="pull-left"><strong>Following</strong></span> {{ request.user.userprofile.following }}</li>
                     </ul> 
                         
-                    <div class="panel panel-default">
+                    {% comment %} <div class="panel panel-default">
                         <div class="panel-heading">Social Media</div>
                         <div class="panel-body">
                             <i class="fa fa-facebook fa-2x"></i> <i class="fa fa-github fa-2x"></i> <i class="fa fa-twitter fa-2x"></i> <i class="fa fa-pinterest fa-2x"></i> <i class="fa fa-google-plus fa-2x"></i>
                         </div>
-                    </div>
+                    </div> {% endcomment %}
                 </div><!--/col-3-->
                 <div class="col-sm-7">
-                    {% comment %} <ul class="nav nav-tabs">
-                        <li class="active p-2"><a data-toggle="tab" href="#home">Home</a></li>
-                        <li><a data-toggle="tab" href="#messages">Menu 1</a></li>
-                        <li><a data-toggle="tab" href="#settings">Menu 2</a></li>
-                    </ul> {% endcomment %}
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="home">
-                            <hr>
-                            {% comment %} <div class="form-group">
+                    <div class="tab-content" style="height: 100%">
+                        <div class="tab-pane active d-flex justify-content-center flex-column align-items-around flex-fill" style="height: 100%" id="home">
+                            <div class="form-group">
                                 <div class="col-xs-6">
                                     <label for="first_name"><h4>First name</h4></label>
-                                    <input type="text" class="form-control" name="first_name" id="first_name" placeholder="first name" title="enter your first name if any.">
+                                    <input type="text" class="form-control" name="first_name" id="first-name" placeholder="first name" title="enter your first name if any.">
+                                </div>
+                                <div class="links text-danger">
+                                    {{user_form.errors.first_name}}
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-xs-6">
                                     <label for="last_name"><h4>Last name</h4></label>
-                                    <input type="text" class="form-control" name="last_name" id="last_name" placeholder="last name" title="enter your last name if any.">
-                                </div>
-                            </div> {% endcomment %}
-                            <div class="form-group">
-                                <div class="col-xs-6">
-                                    <label for="phone"><h4>Phone</h4></label>
-                                    <input type="text" class="form-control" name="phone" id="phone" placeholder="Add your phone">
+                                    <input type="text" class="form-control" name="last_name" id="last-name" placeholder="last name" title="enter your last name if any.">
                                 </div>
                                 <div class="links text-danger">
-                                    {{form.errors.phone}}
+                                    {{user_form.errors.last_name}}
                                 </div>
                             </div>
-                            {% comment %} <div class="form-group">
-                                <div class="col-xs-6">
-                                    <label for="email"><h4>Email</h4></label>
-                                    <input type="email" class="form-control" name="email" id="email" placeholder="you@email.com" title="enter your email.">
-                                </div>
-                            </div> {% endcomment %}
-                            <div class="form-group">
-                                <div class="col-xs-6">
-                                    <label for="location"><h4>Location</h4></label>
-                                    <input type="text" class="form-control" id="location" name="location" placeholder="Add your location">
+                            <div class="flex-fill"></div>
+                            <div class="form-group mt-auto">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1"><i class="fa fa-envelope"></i></span>
+                                    <input id="email" name="email" type="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1">
                                 </div>
                                 <div class="links text-danger">
-                                    {{form.errors.location}}
+                                    {{user_form.errors.email}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1"><i class="fa fa-phone"></i></span>
+                                    <input id="phone" name="phone" type="text" class="form-control" placeholder="Phone" aria-label="Phone" aria-describedby="basic-addon1">
+                                </div>
+                                <div class="links text-danger">
+                                    {{user_profile_form.errors.phone}}
+                                </div>
+                            </div>
+                            <div class="form-group mb-5">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1"><i class="fa fa-map-marker"></i></span>
+                                    <input id="location" name="location" type="text" class="form-control" placeholder="Location" aria-label="Location" aria-describedby="basic-addon1">
+                                </div>
+                                <div class="links text-danger">
+                                    {{user_profile_form.errors.location}}
                                 </div>
                             </div>
                             {% comment %} <div class="form-group">
@@ -151,39 +170,41 @@
                                     <input type="password" class="form-control" name="password2" id="password2" placeholder="password2" title="enter your password2.">
                                 </div>
                             </div> {% endcomment %}
-                            <div class="form-group">
-                                <div class="col-xs-12">
+                            <div class="form-group mt-auto">
+                                <div class="col-xs-12 d-flex justify-content-end">
                                     <br>
-                                    <button class="btn btn-lg btn-success" name="submit" type="SUBMIT"><i class="glyphicon glyphicon-ok-sign"></i> Save</button>
-                                    <button class="btn btn-lg" type="reset"><i class="glyphicon glyphicon-repeat"></i> Reset</button>
+                                    <button class="btn btn-lg btn-success ml-auto" name="submit" type="SUBMIT"><i class="glyphicon glyphicon-ok-sign"></i> Save</button>
+                                    {% comment %} <button class="btn btn-lg" type="reset"><i class="glyphicon glyphicon-repeat"></i> Reset</button> {% endcomment %}
                                 </div>
                             </div>
-                            <hr>
                         </div>
                     </div><!--/tab-content-->
                 </div><!--/col-9-->
             </div><!--/row-->
         </form>
     </div><!--/container-->
+
     <script type="text/javascript">
         form = document.getElementById("profile-form");
         form.reset();
         document.addEventListener("DOMContentLoaded", function(event) {
             // - Code to execute when all DOM content is loaded. 
             // - including fonts, images, etc.
-            console.log("DOM CONTENT LOADED")
+            console.log("DOM CONTENT LOADED");
+            document.getElementById("username").defaultValue = "{{ request.user.username }}"
+            document.getElementById("first-name").defaultValue = "{{ request.user.first_name }}"
+            document.getElementById("last-name").defaultValue = "{{ request.user.last_name }}"
+            document.getElementById("email").defaultValue = "{{ request.user.email }}"
+
             document.getElementById("profile-pic").defaultValue = "{{ request.user.userprofile.profile_pic }}"
             document.getElementById("location").defaultValue = "{{ request.user.userprofile.location }}"
             document.getElementById("phone").defaultValue = "{{ request.user.userprofile.phone }}"
+            document.getElementById("bio").defaultValue = "{{ request.user.userprofile.bio }}"
 
-            console.log(document.getElementById("profile-pic").defaultValue);
-            console.log(document.getElementById("location").defaultValue);
-            console.log(document.getElementById("phone").defaultValue);
+            //console.log(document.getElementById("profile-pic").defaultValue);
+            //console.log(document.getElementById("location").defaultValue);
+            //console.log(document.getElementById("phone").defaultValue);
         });
-
-        {% comment %} console.log(document.getElementById("profile-pic").placeholder); {% endcomment %}
-        {% comment %} console.log("{{ request.user.userprofile.phone }}");
-        console.log("{{ request.user.userprofile.location }}"); {% endcomment %}
 
         function previewImage() {
             var image = document.getElementById("image")
@@ -200,17 +221,22 @@
             };
         };
 
+        $('#pencil').click(function(){
+            $('#username').focus();
+        });
     </script>
     <script type="text/javascript">
 
-        document.addEventListener("DOMContentLoaded", JSalert);
+        if (document.getElementById("messages")) {
+            document.addEventListener("DOMContentLoaded", JSalert);
+        }
         
         function JSalert(){
             //swal("Congrats!", ", Your account is created!", "success");
             var message = document.getElementById("messages");
             message.style.display = "none";
             if (message.innerText = "success") {
-                swal("Success!", "Profile updated", "success");
+                Swal.fire("Success!", "Profile updated", "success");
             }
         }   
     </script>

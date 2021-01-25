@@ -1,9 +1,24 @@
 {% load static %}
 <!-- Sidebar -->
 <style>
-.container {
-    transition: all 0.3s;
-}
+    .container {
+        transition: all 0.3s;
+    }
+
+    #bio-text {
+        background:#2778c4;
+        height:100px;
+        width:200px;
+        overflow: auto; /* Limits amount of text being displayed */
+        margin:0 auto;
+        color:#ffffff;
+        border-radius: 10px;
+    }
+
+    #sidebar-content {
+        position: sticky; 
+        bottom: 0;
+    }
 </style>
 <div class="bg-light border-right" id="sidebar-wrapper">
     {% comment %} <div class="sidebar-heading">
@@ -19,16 +34,16 @@
             <strong>POLLSTER</strong>
         </a>
     </div> {% endcomment %}
-    <div class="list-group list-group-flush">
-        <div id="user-image" class="container p-5" style="display: flex; justify-content: center; align-items: center; margin-top: 80px">
+    <div id="sidebar-content" class="list-group list-group-flush">
+        <div id="user-image" class="container pt-3 text-center" style="display: flex; justify-content: center; align-items: center; margin-top: 80px">
             <div class="container">
                 <img 
                         src="{{ request.user.userprofile.profile_pic.url }}" 
                         class="avatar img-circle img-thumbnail mb-3" 
                         alt="avatar"
                         style="
-                            height: 120px; 
-                            width: 120px;
+                            height: 140px; 
+                            width: 140px;
                             -moz-border-radius: 50%;
                             -webkit-border-radius: 50%;
                             border-radius: 50%;
@@ -45,12 +60,16 @@
                     >
             </div>
         </div>
-        <a href="{% url 'polls:dashboard'%}" class="list-group-item list-group-item-action bg-light">Dashboard</a>
-        <a href="{% url 'polls:polls' page=1 %}" class="list-group-item list-group-item-action bg-light">Polls</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Settings</a>
-        <a href="{% url 'accounts:profile' username=request.user.username %}" class="list-group-item list-group-item-action bg-light">Profile</a>
-		<a class="navbar-text list-group-item list-group-item-action bg-light text-info" style="text-decoration: none" href="{% url 'accounts:logout' %}"><strong>Logout</strong></a>
+        <div class="row my-2 ">
+                <div id="bio-text" class="p-3" maxlength="10"><i class="fa fa-book"></i> {{ request.user.userprofile.bio }}</div>
+        </div>
+        <div>
+            <a href="{% url 'polls:dashboard'%}" class="list-group-item list-group-item-action bg-light">Dashboard</a>
+            <a href="{% url 'polls:polls' page=1 %}" class="list-group-item list-group-item-action bg-light">Polls</a>
+            {% comment %} <a href="#" class="list-group-item list-group-item-action bg-light">Settings</a> {% endcomment %}
+            <a href="{% url 'accounts:profile' username=request.user.username %}" class="list-group-item list-group-item-action bg-light">Profile</a>
+            <button href="#" onclick="askLogout()" class="btn list-group-item list-group-item-action bg-light text-info" style="text-decoration: none"><strong>Logout</strong></button>
+        </div>
     </div>
 </div>
-
 <!-- /#sidebar-wrapper -->

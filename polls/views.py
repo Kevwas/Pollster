@@ -10,7 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Question, Choice
 from django.contrib.auth.models import User
 import json
-
+from django.contrib import messages
 
 def index(request):
     return render(request, 'pages/index.html')
@@ -150,6 +150,7 @@ def vote(request, question_id):
             # Always return an HttpResponseRedirect after successfully dealing
             # with POST data. This prevents data from being posted twice if a
             # user hits the Back Button.
+            messages.success(request, 'You have voted on ' + question.question_text)
             return HttpResponseRedirect(reverse('polls:results',
                                         args=(question.id,)))
 
