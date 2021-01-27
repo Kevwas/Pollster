@@ -27,7 +27,7 @@ def resultsData(request, obj):
     print(voteData)
     return JsonResponse(voteData, safe=False)
 
-ITEMS_PER_PAGE = 2
+ITEMS_PER_PAGE = 10
 # 3 Generic views:
 # class PollsView(LoginRequiredMixin, generic.ListView):
 class PollsView(generic.ListView):
