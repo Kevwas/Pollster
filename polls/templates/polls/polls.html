@@ -8,6 +8,7 @@
       {% comment %} <button class="btn btn-outline-info ml-2" type="submit">Search</button> {% endcomment %}
     </form>
     {% if latest_question_list %}
+      <!-- QUESTIONS CONTAINER -->
       <div id="questions-container">
         {% for question in latest_question_list %}
             <div class="card mb-3 question-card" style="background-color: white">
@@ -30,37 +31,9 @@
               </div>
             </div>
         {% endfor %}
+        {% include 'partials/_paginator.html' %}
       </div>
-
-      {% comment %} <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center">
-          <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1">Previous</a>
-          </li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item">
-            <a class="page-link" href="#">Next</a>
-          </li>
-        </ul>
-      </nav> {% endcomment %}
-
-      {% if not '/polls/all/' in request.path %}
-        <div style="display: flex; width: 100%; justify-content: center">
-          {% if page > 0 %}
-            <a id="back" href="" class="btn btn-dark m-2"><i class="fa fa-arrow-left"></i></a>
-            {% if latest_question_list.count == 10 %}
-              <a id="next" href="" class="btn  btn-dark m-2"><i class="fa fa-arrow-right"></i></a> 
-            {% endif %}
-          {% endif %}
-        </div>
-        <a href="{% url 'polls:all' %}" style="text-decoration: none">
-          <button type="button" class="btn btn-secondary btn-lg btn-block mt-2">
-            Load all polls
-          </button>
-        </a>
-      {% endif %}    
+      <!-- END QUESTIONS CONTAINER -->
     {% else %}
       <p class="h4 text-light text-center m-5">
         No polls are available.
@@ -70,93 +43,4 @@
     </p>
     <div style="height: 60px"></div>
   </div>
-  {% if not '/polls/all/' in request.path %}
-    <script>
-      page = "{{ page|escapejs }}";
-      back_number = Number(page)-1;
-      next_number = Number(page)+1;
-      console.log(page);
-      back_url = "/polls/page_"+back_number+"/";
-      next_url = "/polls/page_"+next_number+"/";
-      console.log(next_url);
-
-      if (back_number === 0) {
-        document.getElementById("back").style.display = "none";
-      } else {
-        document.getElementById("back").style.display = "";
-        document.getElementById("back").href=back_url;  
-      }
-
-      if (document.getElementById("next")) {
-        document.getElementById("next").href=next_url; 
-      }
-    </script>
-  {% endif %}
-  <script>
-    function filterQuestions() {
-      const input = document.getElementById("search-input");
-      const filter = input.value.toUpperCase();
-      const questions_container = document.getElementById("questions-container");
-      let questions_cards = document.getElementsByClassName("question-card");
-      let no_found_text = document.getElementById("no-found-text");
-      no_found_text.style.display = "none";
-      let match = false;
-      for (let i = 0; i < questions_cards.length; i++) {
-        let question_text = questions_cards[i].getElementsByClassName("question-text")[0];
-        let pub_date = questions_cards[i].getElementsByClassName("pub-date")[0];
-        if (question_text || pub_date) {
-          let txtValue = question_text.textContent || question_text.innerText;
-          let dateValue = pub_date.textContent || pub_date.innerText;
-          let composedValue = txtValue + " " + dateValue;
-          if (composedValue.toUpperCase().indexOf(filter) === -1) {
-            console.log(composedValue.toUpperCase().indexOf(filter));
-            no_found_text.style.display = "block";
-            no_found_text.innerText = "No matches for " + input.value;
-            questions_cards[i].style.display = "none";
-          } else {
-            match = true;
-            questions_cards[i].style.display = "block";
-            no_found_text.style.display = "none";
-          }
-        }       
-      }
-      if (match) no_found_text.style.display = "none";
-    }
-
-    function init() {
-        // Clear forms here
-        document.getElementById("search-input").value = "";
-    }
-    
-    window.onload = init;
-  </script> 
-
 {% endblock %}
-
-{% comment %} <!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Polls</title>
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
-  </head>
-  <body>
-    {% if latest_question_list %}
-      <ul>
-        {% for question in latest_question_list %}
-          <li>
-            {# <a href="/polls/{{ question.id }}"> This is a hardcoded url #}
-            <a href="{% url 'polls:detail' question.id %}">
-              {{ question.question_text }}
-            </a>
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p>
-        No polls are available.
-      </p>
-    {% endif %}
-  </body>
-</html> {% endcomment %}

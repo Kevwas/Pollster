@@ -27,7 +27,7 @@ def resultsData(request, obj):
     print(voteData)
     return JsonResponse(voteData, safe=False)
 
-
+ITEMS_PER_PAGE = 2
 # 3 Generic views:
 # class PollsView(LoginRequiredMixin, generic.ListView):
 class PollsView(generic.ListView):
@@ -35,38 +35,8 @@ class PollsView(generic.ListView):
     # redirect_field_name = 'redirect_to'
     template_name = 'polls/polls.html'
     context_object_name = 'latest_question_list'
-    multiplier = 10
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        page = self.request.path.replace('/polls/page_', '').replace('/', '')
-        context['page'] = int(page)
-
-        if self.request.user.is_authenticated:
-            user_profile = self.request.user.userprofile
-            polls_made = json.loads(user_profile.polls_made)
-            context['polls_made'] = polls_made
-        return context
-
-    def get_queryset(self):
-        """
-        Excludes any questions that aren't published yet
-        and those with less than 2 choices.
-        """
-        page_str = self.request.path.replace('/polls/page_', '').replace('/', '')
-        page_num = int(page_str)
-        return Question.objects.exclude(
-            choice__isnull=True).annotate(Count('choice')).exclude(
-            choice__count__lte=1).filter(
-            pub_date__lte=timezone.now()
-        ).order_by('-pub_date')[(page_num-1)*self.multiplier:page_num*self.multiplier]
-
-
-class AllPollsView(generic.ListView):
-    # login_url = 'accounts:login'
-    # redirect_field_name = 'redirect_to'
-    template_name = 'polls/polls.html'
-    context_object_name = 'latest_question_list'
+    ordering = ['-pub_date']
+    paginate_by = ITEMS_PER_PAGE
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -75,6 +45,7 @@ class AllPollsView(generic.ListView):
             user_profile = self.request.user.userprofile
             polls_made = json.loads(user_profile.polls_made)
             context['polls_made'] = polls_made
+            
         return context
 
     def get_queryset(self):
@@ -86,7 +57,7 @@ class AllPollsView(generic.ListView):
             choice__isnull=True).annotate(Count('choice')).exclude(
             choice__count__lte=1).filter(
             pub_date__lte=timezone.now()
-        ).order_by('-pub_date')
+        )
 
 
 class DetailView(LoginRequiredMixin, generic.DetailView):
@@ -157,10 +128,10 @@ def vote(request, question_id):
 class DashboardView(LoginRequiredMixin, generic.ListView):
     login_url = 'accounts:login'
     redirect_field_name = 'redirect_to'
-    # login_url = 'accounts:login'
-    # redirect_field_name = 'redirect_to'
     template_name = 'pages/dashboard.html'
     context_object_name = 'latest_question_list'
+    ordering = ['-pub_date']
+    paginate_by = ITEMS_PER_PAGE
 
     def get_queryset(self):
         """
@@ -174,7 +145,7 @@ class DashboardView(LoginRequiredMixin, generic.ListView):
             choice__isnull=True).annotate(Count('choice')).exclude(
             choice__count__lte=1).filter(
             pub_date__lte=timezone.now()
-        ).order_by('-pub_date')
+        )
 
         questions_to_return = []
         for question in questions:

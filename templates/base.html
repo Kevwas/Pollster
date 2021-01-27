@@ -127,7 +127,46 @@
       });
     </script>
     <script>
-      // NAVBAR SCRIPT
+      // FILTER QUESTIONS SCRIPT
+      function filterQuestions() {
+        const input = document.getElementById("search-input");
+        const filter = input.value.toUpperCase();
+        const questions_container = document.getElementById("questions-container");
+        let questions_cards = document.getElementsByClassName("question-card");
+        let no_found_text = document.getElementById("no-found-text");
+        no_found_text.style.display = "none";
+        let match = false;
+        for (let i = 0; i < questions_cards.length; i++) {
+          let question_text = questions_cards[i].getElementsByClassName("question-text")[0];
+          let pub_date = questions_cards[i].getElementsByClassName("pub-date")[0];
+          if (question_text || pub_date) {
+            let txtValue = question_text.textContent || question_text.innerText;
+            let dateValue = pub_date.textContent || pub_date.innerText;
+            let composedValue = txtValue + " " + dateValue;
+            if (composedValue.toUpperCase().indexOf(filter) === -1) {
+              console.log(composedValue.toUpperCase().indexOf(filter));
+              no_found_text.style.display = "block";
+              no_found_text.innerText = "No matches for " + input.value;
+              questions_cards[i].style.display = "none";
+            } else {
+              match = true;
+              questions_cards[i].style.display = "block";
+              no_found_text.style.display = "none";
+            }
+          }       
+        }
+        if (match) no_found_text.style.display = "none";
+      }
+
+      function init() {
+          // Clear forms here
+          document.getElementById("search-input").value = "";
+      }
+      
+      window.onload = init;
+    </script> 
+    <script>
+      // HIDE AND SHOW NAVBAR SCRIPT
     	var prevScrollpos = window.pageYOffset;
     	console.log(prevScrollpos);
     	window.onscroll = function(e) {
@@ -148,7 +187,7 @@
     	}
     </script>
     <script>
-      // SIDEBAR SCRIPT
+      // HIDE AND SHOW SIDEBAR SCRIPT
       var menu_toggle = document.getElementById("menu-toggle");
       var wrapper = document.getElementById('wrapper');
       var sidebar_wrapper = document.getElementById('sidebar-wrapper');
@@ -156,68 +195,70 @@
       var questions_container = document.getElementById('question-container');
       var main_container_displacement = "7.5rem";
 
-      menu_toggle.addEventListener("click", (e) => {
-        e.preventDefault();
-        wrapper.classList.toggle("toggled");
-        margin_left = window.getComputedStyle(sidebar_wrapper).marginLeft;
-        margin_left_num = parseFloat(margin_left);
+      if (menu_toggle) {
+        menu_toggle.addEventListener("click", (e) => {
+          e.preventDefault();
+          wrapper.classList.toggle("toggled");
+          margin_left = window.getComputedStyle(sidebar_wrapper).marginLeft;
+          margin_left_num = parseFloat(margin_left);
 
-        if (margin_left_num < 0 ) {
-          menu_toggle.className = "menu burger-to-left";
-          if (window.innerWidth > 829) {
-            document.getElementById("main-container").style.marginLeft = main_container_displacement;
-          }
-        } else {
-          menu_toggle.className = "menu burger-to-right";
-          document.getElementById("main-container").style.marginLeft = "0";
-        }
-      }); 
-
-      // Update the burger arrow when the window resizes
-      window.addEventListener("resize",(e) => {
-        //console.log(window.innerWidth)
-        e.preventDefault();
-        if (document.documentElement.clientWidth >= 768) {
-          //console.log("Bigger or equal to 768");
-          if (wrapper.className === "d-flex toggled") {
-            wrapper.classList.toggle("toggled");
-          }
-          menu_toggle.className = "menu burger-to-left";
-          if (window.innerWidth > 829) {
-            document.getElementById("main-container").style.marginLeft = main_container_displacement;
-          }
-        } else {
-          //console.log("Less than 768");
-          if (wrapper.className === "d-flex") {
+          if (margin_left_num < 0 ) {
+            menu_toggle.className = "menu burger-to-left";
+            if (window.innerWidth > 829) {
+              document.getElementById("main-container").style.marginLeft = main_container_displacement;
+            }
+          } else {
             menu_toggle.className = "menu burger-to-right";
             document.getElementById("main-container").style.marginLeft = "0";
           }
-        }
-        //console.log("window resized!");
-        //console.log("NEW WINDOW WIDTH: " + document.documentElement.clientWidth);
-      }, true);
+        }); 
 
-      // Update the burger arrow when the window is loaded
-      window.addEventListener("load", (e) => {
-        e.preventDefault();
-        //console.log("window loaded!");
-        //console.log("WINDOW WIDTH: " + document.documentElement.clientWidth);
-        margin_left = window.getComputedStyle(sidebar_wrapper).marginLeft;
-        margin_left_num = parseFloat(margin_left);
-        //console.log("Margin Left of sidebar: " + margin_left_num);
-
-        if (margin_left_num < 0) {
-          menu_toggle.className = "menu burger-to-right";
-          document.getElementById("main-container").style.marginLeft = "0";
-          //console.log("set burger button to right");
-        } else {
-          menu_toggle.className = "menu burger-to-left";
-          if (window.innerWidth > 829) {
-            document.getElementById("main-container").style.marginLeft = main_container_displacement;
+        // Update the burger arrow when the window resizes
+        window.addEventListener("resize",(e) => {
+          //console.log(window.innerWidth)
+          e.preventDefault();
+          if (document.documentElement.clientWidth >= 768) {
+            //console.log("Bigger or equal to 768");
+            if (wrapper.className === "d-flex toggled") {
+              wrapper.classList.toggle("toggled");
+            }
+            menu_toggle.className = "menu burger-to-left";
+            if (window.innerWidth > 829) {
+              document.getElementById("main-container").style.marginLeft = main_container_displacement;
+            }
+          } else {
+            //console.log("Less than 768");
+            if (wrapper.className === "d-flex") {
+              menu_toggle.className = "menu burger-to-right";
+              document.getElementById("main-container").style.marginLeft = "0";
+            }
           }
-          //console.log("set burger button to left");
-        }
-      }, true);
+          //console.log("window resized!");
+          //console.log("NEW WINDOW WIDTH: " + document.documentElement.clientWidth);
+        }, true);
+
+        // Update the burger arrow when the window is loaded
+        window.addEventListener("load", (e) => {
+          e.preventDefault();
+          //console.log("window loaded!");
+          //console.log("WINDOW WIDTH: " + document.documentElement.clientWidth);
+          margin_left = window.getComputedStyle(sidebar_wrapper).marginLeft;
+          margin_left_num = parseFloat(margin_left);
+          //console.log("Margin Left of sidebar: " + margin_left_num);
+
+          if (margin_left_num < 0) {
+            menu_toggle.className = "menu burger-to-right";
+            document.getElementById("main-container").style.marginLeft = "0";
+            //console.log("set burger button to right");
+          } else {
+            menu_toggle.className = "menu burger-to-left";
+            if (window.innerWidth > 829) {
+              document.getElementById("main-container").style.marginLeft = main_container_displacement;
+            }
+            //console.log("set burger button to left");
+          }
+        }, true);
+      }
     </script>
     <script>
       // LOGOUT SCRIPT

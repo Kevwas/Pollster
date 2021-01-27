@@ -63,12 +63,13 @@
         <div class="row my-2 ">
                 <div id="bio-text" class="p-3" maxlength="10"><i class="fa fa-book"></i> {{ request.user.userprofile.bio }}</div>
         </div>
-        <div>
-            <a href="{% url 'polls:dashboard'%}" class="list-group-item list-group-item-action bg-light">Dashboard</a>
-            <a href="{% url 'polls:polls' page=1 %}" class="list-group-item list-group-item-action bg-light">Polls</a>
+        <div class="mt-3">
+            <a href="{% url 'polls:dashboard'%}" class="list-group-item {% if "dashboard" in request.path %} active disabled {% endif %} list-group-item-action">Dashboard</a>
+            {% comment %} <a href="{% url 'polls:polls' page=1 %}" class="list-group-item list-group-item-action bg-light">Polls</a> {% endcomment %}
+            <a href="{% url 'polls:polls' %}" class="list-group-item {% if "polls" in request.path %} active disabled {% endif %} list-group-item-action">Polls</a>
             {% comment %} <a href="#" class="list-group-item list-group-item-action bg-light">Settings</a> {% endcomment %}
-            <a href="{% url 'accounts:profile' username=request.user.username %}" class="list-group-item list-group-item-action bg-light">Profile</a>
-            <button href="#" onclick="askLogout()" class="btn list-group-item list-group-item-action bg-light text-info" style="text-decoration: none"><strong>Logout</strong></button>
+            <a href="{% url 'accounts:profile' username=request.user.username %}" class="list-group-item {% if "profile" in request.path %} active disabled {% endif %} list-group-item-action">Profile</a>
+            <button href="#" onclick="askLogout()" class="btn list-group-item list-group-item-action text-info" style="text-decoration: none"><strong>Logout</strong></button>
         </div>
     </div>
 </div>

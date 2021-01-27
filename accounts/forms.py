@@ -30,7 +30,7 @@ class UserProfileExtraInfoForm(ModelForm):
 
     def check_file(self):
         profile_pic = self.cleaned_data["profile_pic"]
-        content_type = profile_pic.content_type.split('/')[0]
+        # content_type = profile_pic.content_type.split('/')[0]
         if profile_pic:
             # Only do something if the image field is valid.
             if profile_pic.size > int(MAX_UPLOAD_SIZE):
