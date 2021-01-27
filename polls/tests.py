@@ -93,7 +93,7 @@ class UserCreationAndLoginTest(TestCase):
         self.user = create_temporary_user_to_login(self)
 
     def test_secure_page(self):
-        response = self.client.get(reverse('polls:all'))
+        response = self.client.get(reverse('polls:polls'))
         self.assertEqual(response.status_code, 200)
 
 
@@ -184,7 +184,7 @@ class QuestionPollsViewTests(TestCase):
         """
         If no questions exist, an appropiate message is displayed.
         """
-        response = self.client.get(reverse('polls:all'))
+        response = self.client.get(reverse('polls:polls'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "No polls are available.")
         self.assertQuerysetEqual(response.context['latest_question_list'], [])
@@ -194,9 +194,9 @@ class QuestionPollsViewTests(TestCase):
         Questions with a pub_date in the past are displayed on the index page.
         """
         create_question_with_choices(question_text="Past question.", days=-30)
-        response = self.client.get(reverse('polls:all'))
+        response = self.client.get(reverse('polls:polls'))
         self.assertQuerysetEqual(response.context['latest_question_list'],
-                                 ['<Question: Past question.>'])
+                                ['<Question: Past question.>'])
 
     def test_future_question(self):
         """
@@ -204,7 +204,7 @@ class QuestionPollsViewTests(TestCase):
         page.
         """
         create_question_with_choices(question_text="Future question.", days=30)
-        response = self.client.get(reverse('polls:all'))
+        response = self.client.get(reverse('polls:polls'))
         self.assertContains(response, "No polls are available.")
         self.assertQuerysetEqual(response.context['latest_question_list'], [])
 
@@ -215,7 +215,7 @@ class QuestionPollsViewTests(TestCase):
         """
         create_question_with_choices(question_text="Past question.", days=-30)
         create_question_with_choices(question_text="Future question.", days=30)
-        response = self.client.get(reverse('polls:all'))
+        response = self.client.get(reverse('polls:polls'))
         self.assertQuerysetEqual(
             response.context['latest_question_list'],
             ['<Question: Past question.>']
@@ -226,9 +226,9 @@ class QuestionPollsViewTests(TestCase):
         The questions index page may display multiple questions.
         """
         create_question_with_choices(question_text="Past question 1.",
-                                     days=-30)
+                                    days=-30)
         create_question_with_choices(question_text="Past question 2.", days=-5)
-        response = self.client.get(reverse('polls:all'))
+        response = self.client.get(reverse('polls:polls'))
         self.assertQuerysetEqual(
             response.context['latest_question_list'],
             ['<Question: Past question 2.>', '<Question: Past question 1.>']
@@ -239,8 +239,8 @@ class QuestionPollsViewTests(TestCase):
         The questions without choices are not displayed.
         """
         create_question_with_choices(question_text="Random Question.", days=0,
-                                     choices=0)
-        response = self.client.get(reverse('polls:all'))
+                                    choices=0)
+        response = self.client.get(reverse('polls:polls'))
         self.assertQuerysetEqual(response.context['latest_question_list'], [])
 
     def test_question_with_one_choice(self):
@@ -248,8 +248,8 @@ class QuestionPollsViewTests(TestCase):
         The questions with only one choice are not displayed.
         """
         create_question_with_choices(question_text="Random Question.", days=0,
-                                     choices=1)
-        response = self.client.get(reverse('polls:all'))
+                                    choices=1)
+        response = self.client.get(reverse('polls:polls'))
         self.assertQuerysetEqual(response.context['latest_question_list'], [])
 
     def test_question_with_two_choices(self):
@@ -258,7 +258,7 @@ class QuestionPollsViewTests(TestCase):
         """
         create_question_with_choices(
             question_text="Random Question.", days=0, choices=2)
-        response = self.client.get(reverse('polls:all'))
+        response = self.client.get(reverse('polls:polls'))
         self.assertQuerysetEqual(
             response.context['latest_question_list'],
             ['<Question: Random Question.>']
@@ -269,8 +269,8 @@ class QuestionPollsViewTests(TestCase):
         The questions with more than two choices are displayed.
         """
         create_question_with_choices(question_text="Random Question.",
-                                     days=0, choices=3)
-        response = self.client.get(reverse('polls:all'))
+                                    days=0, choices=3)
+        response = self.client.get(reverse('polls:polls'))
         self.assertQuerysetEqual(
             response.context['latest_question_list'],
             ['<Question: Random Question.>']
@@ -299,7 +299,7 @@ class QuestionModelTests(TestCase):
         is within the last day.
         """
         time = timezone.now() - datetime.timedelta(hours=23,
-                                                   minutes=59, seconds=59)
+                                                minutes=59, seconds=59)
         recent_question = Question(pub_date=time)
         self.assertIs(recent_question.was_published_recently(), True)
 
@@ -328,27 +328,20 @@ class UserPagesRestrictionsTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_polls_view(self):
-        user = create_temporary_user_to_login(self)
-        # user_profile = UserProfile.objects.create(user=user, identification=123456789)
-        url = reverse('polls:polls', args=(1,))
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-
-    def test_all_polls_view(self):
-        url = reverse('polls:all')
+        url = reverse('polls:polls')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
     def test_detail_view(self):
         question = create_question_with_choices(question_text="Random Question.",
-                                     days=0, choices=3)
+                                    days=0, choices=3)
         url = reverse('polls:detail', args=(question.id,))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
 
     def test_results_view(self):
         question = create_question_with_choices(question_text="Random Question.",
-                                     days=0, choices=3)
+                                    days=0, choices=3)
         url = reverse('polls:results', args=(question.id,))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -360,7 +353,7 @@ class UserVotingTests(TestCase):
 
     def test_voting_without_selecting_a_choice(self):
         question = create_question_with_choices(question_text="Random Question.",
-                                     days=0, choices=3)
+                                    days=0, choices=3)
         url = reverse('polls:vote', args=(question.id,))
         response = self.client.post(url)
         self.assertEqual(
@@ -370,7 +363,7 @@ class UserVotingTests(TestCase):
 
     def test_first_time_voting(self):
         question = create_question_with_choices(question_text="Random Question.",
-                                     days=0, choices=3)
+                                    days=0, choices=3)
         choice_id = question.choice_set.all()[0].id
         url = reverse('polls:vote', args=(question.id,))
         form = {'choice': choice_id,}
@@ -380,7 +373,7 @@ class UserVotingTests(TestCase):
 
     def test_second_time_voting(self):
         question = create_question_with_choices(question_text="Random Question.",
-                                     days=0, choices=3)
+                                    days=0, choices=3)
         choice_id = question.choice_set.all()[0].id
         profile = self.user.userprofile
         profile.set_polls_made(question.id)

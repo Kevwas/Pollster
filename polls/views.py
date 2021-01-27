@@ -57,7 +57,7 @@ class PollsView(generic.ListView):
             choice__isnull=True).annotate(Count('choice')).exclude(
             choice__count__lte=1).filter(
             pub_date__lte=timezone.now()
-        )
+        ).order_by('-pub_date')
 
 
 class DetailView(LoginRequiredMixin, generic.DetailView):
@@ -130,7 +130,7 @@ class DashboardView(LoginRequiredMixin, generic.ListView):
     redirect_field_name = 'redirect_to'
     template_name = 'pages/dashboard.html'
     context_object_name = 'latest_question_list'
-    ordering = ['-pub_date']
+    # ordering = ['-pub_date']
     paginate_by = ITEMS_PER_PAGE
 
     def get_queryset(self):
@@ -145,7 +145,7 @@ class DashboardView(LoginRequiredMixin, generic.ListView):
             choice__isnull=True).annotate(Count('choice')).exclude(
             choice__count__lte=1).filter(
             pub_date__lte=timezone.now()
-        )
+        ).order_by('-pub_date')
 
         questions_to_return = []
         for question in questions:
