@@ -11,6 +11,14 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import environ
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+# reading .env file
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +28,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '_rl8(m5j#opso1r4h&0!8f3==%!i9m3jslar^5z5w(aw9d1nks'
+# SECRET_KEY = '_rl8(m5j#opso1r4h&0!8f3==%!i9m3jslar^5z5w(aw9d1nks'
+# Raises django's ImproperlyConfigured exception if SECRET_KEY not in os.environ
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+# False if not in os.environ
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
 
@@ -135,11 +147,11 @@ MEDIA_ROOT = BASE_DIR / 'static/images'
 #SMTP Configuration (Simple Mail Transfer Protocol)
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587 
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'arizakevin.dev@gmail.com'
-EMAIL_HOST_PASSWORD = 'Vkpwcassc3141592'
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = env('EMAIL_PORT') 
+EMAIL_USE_TLS = env('EMAIL_USE_TLS')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 
 # Set the data above to an .env file for production
 

@@ -11,6 +11,8 @@ from .models import Question, Choice
 from django.contrib.auth.models import User
 import json
 from django.contrib import messages
+# from .forms import CreateChoicesForm, CreatePollsForm
+import datetime
 
 def index(request):
     return render(request, 'pages/index.html')
@@ -156,51 +158,81 @@ class DashboardView(LoginRequiredMixin, generic.ListView):
 
         return questions_to_return
 
-# Index
-# 1
-# def index(request):
-#     latest_question_list = Question.objects.order_by('-pub_date')[:5]
-#     template = loader.get_template('polls/index.html')
-#     context = {
-#         'latest_question_list': latest_question_list,
-#     }
-#     return HttpResponse(template.render(context, request))
+# @login_required
+# def CreatePollsView(request):
+#     user_profile = request.user.userprofile
+#     now = datetime.datetime.now()
+#     # polls_made = user_profile.get_polls_made()
+#     # polls_created = user_profile.get_polls_created()
 
-# 2
-# A shorcut: render()
-# def index(request):
-#     latest_question_list = Question.objects.order_by('-pub_date')[:5]
-#     context = {
-#         'latest_question_list': latest_question_list,
-#     }
-#     return render(request, 'polls/index.html', context)
+#     if request.method == "POST":
+#         # print("REQUEST IS A POST!")
+#         polls_form = CreatePollsForm(request.POST)
+#         choices_form = CreateChoicesForm(request.POST)
 
-# Detail
-# 1
-# def detail(request, question_id):
-#     return HttpResponse("You're looking at question %s." % question_id)
+#         polls_form.instance.creator = request.user 
+#         polls_form.instance.pub_date = now
 
-# Long version for raising a 404
-# def detail(request, question_id):
-#     try:
-#         question = Question.objects.get(pk=question_id)
-#     except Question.DoesNotExist:
-#         raise Http404("Question does not exist")
-#     return render(request, 'polls/detail.html', {'question': question})
+#         # Clear all messages
+#         system_messages = messages.get_messages(request)
+#         for message in system_messages:
+#             # This iteration is necessary
+#             pass
+#         # Messages cleared.
 
-# 2
-# A shortcut: get_object_or_404()
-# def detail(request, question_id):
-#     question = get_object_or_404(Question, pk=question_id)
-#     return render(request, 'polls/detail.html', {'question': question})
+#         if polls_form.is_valid() and choices_form.is_valid():
+#             # print("FORM IS VALID!")
 
-# Results
-# 1
-# def results(request, question_id):
-#     response = "You're looking at the results of question %s."
-#     return HttpResponse(response % question_id)
+#             polls_form.save()
+#             choices_form.save()
+#             messages.success(request, 'User info updated')
+#         else:
+#             # print("FORM IS NOT VALID!")
+#             messages.error(request, {
+#                 'user_profile_form': user_profile_form,
+#                 'user_form': user_form,
+#             })
 
-# 2
-# def results(request, question_id):
-#     question = get_object_or_404(Question, pk=question_id)
-#     return render(request, 'polls/results.html', {'question': question})
+#     context = {'user_profile_form': user_profile_form, 'uer_form': user_form,
+#                 'polls_made': polls_made, 'polls_created': polls_created}
+
+#     return render(request, 'accounts/profile.html', context)
+
+# @login_required
+# def AddChoicesView(request):
+#     user_profile = request.user.userprofile
+#     user_profile_form = UserProfileExtraInfoForm(instance=user_profile)
+#     user_form = UserForm(instance=request.user)
+#     polls_made = user_profile.get_polls_made()
+#     polls_created = user_profile.get_polls_created()
+
+#     if request.method == "POST":
+#         # print("REQUEST IS A POST!")
+#         user_profile_form = UserProfileExtraInfoForm(request.POST, request.FILES, instance=user_profile)
+#         user_form = UserForm(request.POST, instance=request.user)
+#         # print(request.FILES)
+#         # print(request.POST)
+
+#         # Clear all messages
+#         system_messages = messages.get_messages(request)
+#         for message in system_messages:
+#             # This iteration is necessary
+#             pass
+#         # Messages cleared.
+
+#         if user_profile_form.is_valid() and user_form.is_valid():
+#             # print("FORM IS VALID!")
+#             user_profile_form.save()
+#             user_form.save()
+#             messages.success(request, 'User info updated')
+#         else:
+#             # print("FORM IS NOT VALID!")
+#             messages.error(request, {
+#                 'user_profile_form': user_profile_form,
+#                 'user_form': user_form,
+#             })
+
+#     context = {'user_profile_form': user_profile_form, 'uer_form': user_form,
+#                 'polls_made': polls_made, 'polls_created': polls_created}
+
+#     return render(request, 'accounts/profile.html', context)

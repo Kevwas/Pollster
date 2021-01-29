@@ -111,7 +111,7 @@
       <div id="page-content-wrapper">
         {% include 'partials/_navbar.html' %}
         <div class="container col-12 d-flex justify-content-center" id="main-container">
-            <div class="col-12 p-5">
+            <div class="col-12 p-5 d-flex justify-content-center align-content-center ">
               {% block content %}{% endblock %}
             </div>
         </div>
@@ -160,7 +160,9 @@
 
       function init() {
           // Clear forms here
-          document.getElementById("search-input").value = "";
+          if (document.getElementById("search-input")) {
+            document.getElementById("search-input").value = "";
+          }
       }
       
       window.onload = init;

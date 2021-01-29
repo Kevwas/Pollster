@@ -17,7 +17,7 @@ class UserProfile(models.Model):
     followers = models.IntegerField(default=0)
     following = models.IntegerField(default=0)
     stars = models.IntegerField(default=0)
-    bio = models.TextField(max_length=500, null=True, blank=True)
+    bio = models.TextField(max_length=500, null=True, blank=True, default='Bio')
     
 
     def set_polls_made(self, poll):
