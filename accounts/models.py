@@ -12,7 +12,7 @@ class UserProfile(models.Model):
     polls_created = models.TextField(default='[]')
     identification = models.TextField(max_length=200, null=True, blank=True, unique=True)
     location = models.TextField(max_length=200, null=True, blank=True)
-    phone = PhoneNumberField(null=True, blank=True)
+    phone = PhoneNumberField(null=True, blank=True, default='+12125552368')
     profile_pic = models.ImageField(null=True, blank=True, default='user_default.png')
     followers = models.IntegerField(default=0)
     following = models.IntegerField(default=0)
