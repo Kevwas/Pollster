@@ -11,7 +11,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = '_rl8(m5j#opso1r4h&0!8f3==%!i9m3jslar^5z5w(aw9d1nks'
 # Raises django's ImproperlyConfigured exception if SECRET_KEY not in os.environ
-SECRET_KEY = '_rl8(m5j#opso1r4h&0!8f3==%!i9m3jslar^5z5w(aw9d1nks'
+# SECRET_KEY = '_rl8(m5j#opso1r4h&0!8f3==%!i9m3jslar^5z5w(aw9d1nks'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # try :
 #     SECRET_KEY = os.environ.get('SECRET_KEY')
@@ -151,6 +152,6 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 LOGIN_URL = '/login/'
 
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False

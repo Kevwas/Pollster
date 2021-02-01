@@ -14,6 +14,9 @@ DATABASES = {
     'default': dj_database_url.config()
 }
 
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 # For heroku
 django_heroku.settings(locals())
