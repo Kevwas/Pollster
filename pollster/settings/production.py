@@ -15,3 +15,7 @@ DATABASES = {
 
 # For heroku
 django_heroku.settings(locals())
+
+# STATICFILES_DIRS = []
+
+# STATIC_ROOT = BASE_DIR / 'static'
