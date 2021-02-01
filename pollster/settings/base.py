@@ -11,7 +11,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = '_rl8(m5j#opso1r4h&0!8f3==%!i9m3jslar^5z5w(aw9d1nks'
 # Raises django's ImproperlyConfigured exception if SECRET_KEY not in os.environ
-SECRET_KEY = os.environ.get('SECRET_KEY')
+try :
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+except:
+    print("Couldn't SECRET_KEY from environment.")
+else:
+    print('Instead, it will be set insecurely.')
+    SECRET_KEY = '_rl8(m5j#opso1r4h&0!8f3==%!i9m3jslar^5z5w(aw9d1nks'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
