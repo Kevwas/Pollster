@@ -7,7 +7,7 @@ import os
 DEBUG = False
 
 # For heroku
-ALLOWED_HOSTS = ['https://pollsterwtp.herokuapp.com/']
+ALLOWED_HOSTS = ['*']
 
 # For heroku
 DATABASES = {
@@ -17,7 +17,5 @@ DATABASES = {
 # For heroku
 django_heroku.settings(locals())
 
-STATICFILES_DIRS = []
 
-STATIC_ROOT = BASE_DIR / 'static'
 
