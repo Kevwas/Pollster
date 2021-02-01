@@ -14,6 +14,7 @@ DATABASES = {
     'default': dj_database_url.config()
 }
 
+
 # For heroku
 django_heroku.settings(locals())
 
