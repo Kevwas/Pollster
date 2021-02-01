@@ -4,10 +4,10 @@ import django_heroku
 import dj_database_url
 import os
 
-DEBUG = True
+DEBUG = False
 
 # For heroku
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['https://pollsterwtp.herokuapp.com/']
 
 # For heroku
 DATABASES = {
