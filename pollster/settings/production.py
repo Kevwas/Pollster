@@ -4,7 +4,7 @@ import django_heroku
 import dj_database_url
 import os
 
-DEBUG = False
+DEBUG = True
 
 # For heroku
 ALLOWED_HOSTS = ['*']
@@ -17,7 +17,7 @@ DATABASES = {
 # For heroku
 django_heroku.settings(locals())
 
-# STATICFILES_DIRS = []
+STATICFILES_DIRS = []
 
-# STATIC_ROOT = BASE_DIR / 'static'
+STATIC_ROOT = BASE_DIR / 'static'
 

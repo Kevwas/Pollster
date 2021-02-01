@@ -13,7 +13,7 @@ class UserProfile(models.Model):
     identification = models.TextField(max_length=200, null=True, blank=True, unique=True)
     location = models.TextField(max_length=200, null=True, blank=True)
     phone = PhoneNumberField(null=True, blank=True, default='+12125552368')
-    profile_pic = models.ImageField(null=True, blank=True, default='user_default.png')
+    profile_pic = models.ImageField(null=True, blank=True)
     followers = models.IntegerField(default=0)
     following = models.IntegerField(default=0)
     stars = models.IntegerField(default=0)
