@@ -7,7 +7,7 @@ import os
 DEBUG = False
 
 # For heroku
-ALLOWED_HOSTS = ['pollsterwtp.herokuapp.com']
+ALLOWED_HOSTS = ['*']
 
 # For heroku
 DATABASES = {
