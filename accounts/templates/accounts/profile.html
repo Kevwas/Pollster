@@ -21,8 +21,8 @@
             padding: 0;
         }
         .image-w {
-            width: 200px;
-            height: 200px;
+            width: 150px;
+            height: 150px;
         }
         .image-w img {
             object-fit: cover;
@@ -69,7 +69,13 @@
                 <div class="col-sm-5" style="min-width: 180px;"><!--left col-->
                     <div class="text-center d-flex flex-column justify-content-center align-items-center">
                         <div class="image-w">
-                            <img id="image" src="{{ request.user.userprofile.profile_pic.url }}"  alt="avatar" 
+                            <img id="image" 
+                                {% if request.user.userprofile.profile_pic %} 
+                                    src="{{request.user.userprofile.profile_pic.url}}"
+                                {% else %} 
+                                    src="https://cdn.pixabay.com/photo/2012/04/26/19/43/profile-42914_960_720.png"
+                                {% endif %} 
+                                alt="avatar" 
                                 style="
                                     {% if "user_default" in request.user.userprofile.profile_pic.url %}
                                         background-color: #bfbcbc; 

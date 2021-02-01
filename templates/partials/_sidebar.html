@@ -37,27 +37,31 @@
     <div id="sidebar-content" class="list-group list-group-flush">
         <div id="user-image" class="container pt-3 text-center" style="display: flex; justify-content: center; align-items: center; margin-top: 80px">
             <div class="container">
-                <img 
-                        src="{{ request.user.userprofile.profile_pic.url }}" 
-                        class="avatar img-circle img-thumbnail mb-3" 
-                        alt="avatar"
-                        style="
-                            height: 140px; 
-                            width: 140px;
-                            -moz-border-radius: 50%;
-                            -webkit-border-radius: 50%;
-                            border-radius: 50%;
-                            {% if "user_default" in request.user.userprofile.profile_pic.url %}
-                                background-color: #bfbcbc; 
-                                padding: 20px;
-                            {% else %}
-                                border: 0;
-                                margin: 0;
-                                padding: 0;
-                                object-fit: cover;
-                            {% endif %}
-                        "
-                    >
+                <img
+                    {% if request.user.userprofile.profile_pic %} 
+                        src="{{request.user.userprofile.profile_pic.url}}"
+                    {% else %} 
+                        src="https://cdn.pixabay.com/photo/2012/04/26/19/43/profile-42914_960_720.png"
+                    {% endif %} 
+                    class="avatar img-circle img-thumbnail mb-3" 
+                    alt="avatar"
+                    style="
+                        height: 140px; 
+                        width: 140px;
+                        -moz-border-radius: 50%;
+                        -webkit-border-radius: 50%;
+                        border-radius: 50%;
+                        {% if "user_default" in request.user.userprofile.profile_pic.url %}
+                            background-color: #bfbcbc; 
+                            padding: 20px;
+                        {% else %}
+                            border: 0;
+                            margin: 0;
+                            padding: 0;
+                            object-fit: cover;
+                        {% endif %}
+                    "
+                >
             </div>
         </div>
         <div class="row my-2 ">
