@@ -5,11 +5,7 @@ import dj_database_url
 import os
 
 # For heroku
-DEBUG=False
-
-# For heroku
-if not DEBUG:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+DEBUG=True
 
 # For heroku
 SECRET_KEY = os.environ.get('SECRET_KEY')
