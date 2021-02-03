@@ -25,7 +25,7 @@ class Question(models.Model):
 
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    creator = models.OneToOneField(User, on_delete=models.DO_NOTHING, null=True, blank=True)
+    creator = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True, blank=True)
     choice_text = models.CharField(max_length=100)
     votes = models.IntegerField(default=0)
 
