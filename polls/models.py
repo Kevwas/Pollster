@@ -11,6 +11,7 @@ class Question(models.Model):
     question_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
     description_text = models.TextField('brief description')
+    multiple_choice = models.BooleanField(default=0)
 
     def __str__(self):
         return self.question_text
@@ -21,6 +22,9 @@ class Question(models.Model):
     was_published_recently.admin_order_field = 'pub_date'
     was_published_recently.boolean = True
     was_published_recently.short_description = 'Published recently?'
+
+    def multiple_choice_selection(self):
+        return bool(self.multiple_choice)
     
 #commit
 class Choice(models.Model):
