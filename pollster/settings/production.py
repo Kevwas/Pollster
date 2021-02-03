@@ -5,7 +5,7 @@ import dj_database_url
 import os
 
 # For heroku
-DEBUG = os.environ.get('DEBUG')
+DEBUG =False
 
 # For heroku
 SECRET_KEY = os.environ.get('SECRET_KEY')
