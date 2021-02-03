@@ -22,7 +22,7 @@ class Question(models.Model):
     was_published_recently.boolean = True
     was_published_recently.short_description = 'Published recently?'
     
-
+#commit
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     creator = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True, blank=True)
