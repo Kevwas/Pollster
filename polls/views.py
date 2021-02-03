@@ -26,7 +26,7 @@ def resultsData(request, obj):
     for choice in choices:
         voteData.append({choice.choice_text: choice.votes})
 
-    print(voteData)
+    # print(voteData)
     return JsonResponse(voteData, safe=False)
 
 ITEMS_PER_PAGE = 10
@@ -100,7 +100,7 @@ def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     user_profile = request.user.userprofile
     polls_made = user_profile.get_polls_made()
-    if question_id in polls_made:
+    if question.id in polls_made:
         # Redirect to the polls
         return render(request, 'polls/detail.html', {
             'question': question,
@@ -108,7 +108,11 @@ def vote(request, question_id):
         })
     else:
         try:
-            select_choice = question.choice_set.get(pk=request.POST['choice'])
+            choices = []
+            # print(request.POST.getlist('choice'))
+            for choice in request.POST.getlist('choice'):
+                # print("Choice: " + choice)
+                choices.append(question.choice_set.get(pk=choice))
         except (KeyError, Choice.DoesNotExist):
             # Redisplay the question voting form
             return render(request, 'polls/detail.html', {
@@ -116,8 +120,9 @@ def vote(request, question_id):
                 'error_message': "You didn't select a choice.",
             })
         else:
-            select_choice.votes = F('votes') + 1
-            select_choice.save()
+            for choice in choices:
+                choice.votes = F('votes') + 1
+                choice.save()
             user_profile.set_polls_made(question.id)
             user_profile.save()
             # Always return an HttpResponseRedirect after successfully dealing
