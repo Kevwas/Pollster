@@ -5,7 +5,11 @@ import dj_database_url
 import os
 
 # For heroku
-DEBUG =False
+DEBUG=False
+
+# For heroku
+if not DEBUG:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # For heroku
 SECRET_KEY = os.environ.get('SECRET_KEY')
@@ -17,6 +21,8 @@ ALLOWED_HOSTS = ['*']
 DATABASES = {
     'default': dj_database_url.config()
 }
+
+
 
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True

@@ -141,7 +141,6 @@ else:
 MEDIA_ROOT = BASE_DIR / 'static/media'
 
 #SMTP Configuration (Simple Mail Transfer Protocol)
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
