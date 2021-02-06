@@ -62,7 +62,7 @@
             <div class="row m-1 my-4">
                 <div class="input-group">
                     <span class="input-group-text"><i class="fa fa-book"></i></span>
-                    <textarea class="form-control" name="bio" id="bio" aria-label="With textarea" placeholder="Bio"></textarea>
+                    <textarea class="form-control" name="bio" id="bio" aria-label="With textarea" placeholder="{{ request.user.userprofile.bio }}"></textarea>
                 </div>
             </div>
             <div class="row pt-4">
