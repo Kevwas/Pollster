@@ -67,7 +67,7 @@
             </div>
             <div class="row pt-4">
                 <div class="col-sm-5" style="min-width: 180px;"><!--left col-->
-                    <div class="text-center d-flex flex-column justify-content-center align-items-center">
+                    {% comment %} <div class="text-center d-flex flex-column justify-content-center align-items-center">
                         <div class="image-w">
                             <img id="image" 
                                 {% if request.user.userprofile.profile_pic %} 
@@ -97,8 +97,7 @@
                             Upload
                         </label>
                         <input id="profile-pic" type="FILE" name="profile_pic" onchange="previewImage();"/>
-                        {% comment %} <input type="submit" name="submit" value="Submit" /> {% endcomment %}
-                    </div></hr><br>
+                    </div></hr><br> {% endcomment %}
 
                     {% comment %} <div class="panel panel-default pb-3">
                         <div class="panel-heading">Website <i class="fa fa-link fa-1x"></i></div>
