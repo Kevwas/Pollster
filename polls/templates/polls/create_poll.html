@@ -114,8 +114,16 @@
                     </div>
                 </div>
             </div>
-            <div style="white-space: nowrap; cursor: pointer; :hover { background-color: #ccc;}" onclick="addChoice()">
-                <p style="color: #447e9b"><i class="fa fa-plus" style="color: green"></i> Add another choice</p>
+            <div class="p-1 pl-2 mb-4" style="background-color: #e9ecef; border: 1px solid rgba(0,0,0,.125); border-radius: .25rem;">
+                <div style="white-space: nowrap;">
+                    <p onclick="addChoice()" class="mb-0" style="color: #447e9b; cursor: pointer; :hover { background-color: #ccc;}; max-width: 160px"><i class="fa fa-plus" style="color: green"></i> Add another choice</p>
+                </div>
+            </div>
+            <div class="p-2 pl-2 mb-4" style="background-color: #e9ecef; border: 1px solid rgba(0,0,0,.125); border-radius: .25rem;">
+                <div class="submit-row d-flex">
+                    <input class="btn btn-info ml-auto mr-3" type="submit" value="Save" class="default" name="_save">
+                    <input class="btn btn-info" type="submit" value="Save and add another" name="_addanother">
+                </div>
             </div>
         </form>
     </div>
