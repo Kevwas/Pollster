@@ -11,8 +11,9 @@ from .models import Question, Choice
 from django.contrib.auth.models import User
 import json
 from django.contrib import messages
-# from .forms import CreateChoicesForm, CreatePollsForm
+# from .forms import CreateChoiceForm, CreateQuestionForm
 import datetime
+from .forms import CreateQuestionForm, CreateChoiceForm
 
 def index(request):
     return render(request, 'pages/index.html')
@@ -20,7 +21,7 @@ def index(request):
 def resultsData(request, obj):
     voteData = []
 
-    question = Question.objects.get(id=obj)
+    question = Question.objects.get(id=obj) 
     choices = question.choice_set.all()
 
     for choice in choices:
@@ -163,45 +164,46 @@ class DashboardView(LoginRequiredMixin, generic.ListView):
 
         return questions_to_return
 
-# @login_required
-# def CreatePollsView(request):
-#     user_profile = request.user.userprofile
-#     now = datetime.datetime.now()
-#     # polls_made = user_profile.get_polls_made()
-#     # polls_created = user_profile.get_polls_created()
+@login_required
+def CreatePollView(request):
+    question_form = CreateQuestionForm()
+    choice_form = CreateChoiceForm()
+    user_profile = request.user.userprofile
 
-#     if request.method == "POST":
-#         # print("REQUEST IS A POST!")
-#         polls_form = CreatePollsForm(request.POST)
-#         choices_form = CreateChoicesForm(request.POST)
+    if request.method == "POST":
+        question_form = CreateQuestionForm(request.POST)
+        choice_form = CreateChoiceForm(request.POST)
+        
+        # Clear all messages
+        system_messages = messages.get_messages(request)
+        for message in system_messages:
+            # This iteration is necessary
+            pass
+        # Messages cleared.
+        if question_form.is_valid() and choice_form.is_valid():
+            # print("FORM IS VALID!")
+            question = Question(question_text=question_form.cleaned_data.get('question_text'), 
+                                description_text=question_form.cleaned_data.get('description_text'), 
+                                multiple_choice=question_form.cleaned_data.get('multiple_choice'),
+                                creator=request.user)
+            question.save()
+            for choice in request.POST.getlist('choice'):
+                # print("Choice: " + choice)
+                ch = Choice(choice_text=choice, creator=request.user, question=question)
+                ch.save()
+            user_profile.set_polls_created(question.id)
+            messages.success(request, 'Poll created succesfully!')
+        else:
+            # print("FORM IS NOT VALID!")
+            messages.error(request, {
+                'question_form': question_form,
+                'choice_form': choice_form,
+            })
 
-#         polls_form.instance.creator = request.user 
-#         polls_form.instance.pub_date = now
+    context = {'question_form': question_form, 'choice_form': choice_form}
 
-#         # Clear all messages
-#         system_messages = messages.get_messages(request)
-#         for message in system_messages:
-#             # This iteration is necessary
-#             pass
-#         # Messages cleared.
+    return render(request, 'polls/create_poll.html', context)
 
-#         if polls_form.is_valid() and choices_form.is_valid():
-#             # print("FORM IS VALID!")
-
-#             polls_form.save()
-#             choices_form.save()
-#             messages.success(request, 'User info updated')
-#         else:
-#             # print("FORM IS NOT VALID!")
-#             messages.error(request, {
-#                 'user_profile_form': user_profile_form,
-#                 'user_form': user_form,
-#             })
-
-#     context = {'user_profile_form': user_profile_form, 'uer_form': user_form,
-#                 'polls_made': polls_made, 'polls_created': polls_created}
-
-#     return render(request, 'accounts/profile.html', context)
 
 # @login_required
 # def AddChoicesView(request):

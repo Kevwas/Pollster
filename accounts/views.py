@@ -103,7 +103,7 @@ def ProfileView(request, username):
                 'user_form': user_form,
             })
 
-    context = {'user_profile_form': user_profile_form, 'uer_form': user_form,
+    context = {'user_profile_form': user_profile_form, 'user_form': user_form,
                 'polls_made': polls_made, 'polls_created': polls_created}
 
     return render(request, 'accounts/profile.html', context)

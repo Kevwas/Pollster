@@ -68,6 +68,7 @@
                 <div id="bio-text" class="p-3" maxlength="10"><i class="fa fa-book"></i> {{ request.user.userprofile.bio }}</div>
         </div>
         <div class="mt-3">
+            <a href="{% url 'polls:createPoll'%}" class="list-group-item {% if "create-poll" in request.path %} active disabled {% endif %} list-group-item-action">Create Poll</a>
             <a href="{% url 'polls:dashboard'%}" class="list-group-item {% if "dashboard" in request.path %} active disabled {% endif %} list-group-item-action">Dashboard</a>
             {% comment %} <a href="{% url 'polls:polls' page=1 %}" class="list-group-item list-group-item-action bg-light">Polls</a> {% endcomment %}
             <a href="{% url 'polls:polls' %}" class="list-group-item {% if "polls" in request.path %} active disabled {% endif %} list-group-item-action">Polls</a>

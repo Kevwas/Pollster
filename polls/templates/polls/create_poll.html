@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <style>
+        .input-group-text {
+            min-width: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .errorlist {
+            padding: 0;
+        }
+        .custom-form-text {
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #495057;
+        }
+    </style>
+    <div class="container bootstrap snippet bg-light card p-5 my-5" style="width: 80%;">
+        {% for message in messages %}
+            {% if message.tags == "success" %} 
+                <p id="messages" class="text-success lead">
+                    {{message}}
+                </p>   
+            {% endif %}
+        {% endfor %}
+        <div class="text-center mb-5"><p class="h2">Create Poll</p></div>
+        <form id="profile-form" class="form" method="POST" action="" enctype="multipart/form-data" id="registrationForm">
+            {% csrf_token %}
+            <div class="row">
+                {% comment %} <div class="col-sm-12 text-center pb-4"><h1>{{request.user}}</h1></div> {% endcomment %}
+                <div class="form-group col-sm-12 text-center d-flex justify-content-center">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Title</span>
+                        </div>
+                        <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                    </div>
+                    <div class="links text-danger">
+                        {{user_form.errors.title}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m-1 my-4">
+                <div class="input-group">
+                    <span class="input-group-text">Description</span>
+                    <textarea form="profile-form" class="form-control" name="description_text" id="description_text" aria-label="With textarea"></textarea>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" style="white-space: wrap;">Allow multiple choices selection
+                    <input class="ml-3" type="checkbox" aria-label="Checkbox for following text input">
+                </span>
+            </div>
+            
+            <div style="background-color: #e9ecef; border: 1px solid rgba(0,0,0,.125); border-radius: .25rem; max-width: 280px; padding: .375rem .75rem;">
+                <p class="custom-form-text h3" style="font-size: 1.3rem;">Date Published</p>
+                <br>
+                <label class="custom-form-text" for="birthday">Date:</label>
+                <input type="date" id="birthday" name="birthday">
+                <br><br>
+                <label class="custom-form-text" for="time">Select a time:</label>
+                <input type="time" id="appt" name="time">
+            </div>
+
+            <div class="p-1 pl-2 mb-4 mt-5" style="background-color: #e9ecef; border: 1px solid rgba(0,0,0,.125); border-radius: .25rem;">
+                <p class="h3 mb-0" style="color: #495057;">Choices</p>
+            </div>
+            <div id="choices-section">
+                <div class="row" id="choice_1">
+                    <div class="form-group col-sm-12 text-center d-flex justify-content-center">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Choice 1</span>
+                            </div>
+                            <input name="choice_1" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                            <div id="1" style="cursor: pointer; :hover { background-color: #ccc;}" class="text-center p-1 px-2 ml-2" onclick="deleteChoice(this.parentNode.parentNode.parentNode.id)">
+                                <i class="fa fa-trash pb-0 align-middle" style="font-size: 20px"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id="choice_2">
+                    <div class="form-group col-sm-12 text-center d-flex justify-content-center">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Choice 2</span>
+                            </div>
+                            <input name="choice_2" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                            <div id="1" style="cursor: pointer; :hover { background-color: #ccc;}" class="text-center p-1 px-2 ml-2" onclick="deleteChoice(this.parentNode.parentNode.parentNode.id)">
+                                <i class="fa fa-trash pb-0 align-middle" style="font-size: 20px"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="choice_3">
+                    <div class="form-group col-sm-12 text-center d-flex justify-content-center">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Choice 3</span>
+                            </div>
+                            <input name="choice_3" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                            <div id="1" style="cursor: pointer; :hover { background-color: #ccc;}" class="text-center p-1 px-2 ml-2" onclick="deleteChoice(this.parentNode.parentNode.parentNode.id)">
+                                <i class="fa fa-trash pb-0 align-middle" style="font-size: 20px"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="white-space: nowrap; cursor: pointer; :hover { background-color: #ccc;}" onclick="addChoice()">
+                <p style="color: #447e9b"><i class="fa fa-plus" style="color: green"></i> Add another choice</p>
+            </div>
+        </form>
+    </div>
+    <!--/container-->
+
+    <script type="text/javascript">
+        if (document.getElementById("messages")) {
+            document.addEventListener("DOMContentLoaded", JSalert);
+        }
+        
+        function JSalert(){
+            //swal("Congrats!", ", Your account is created!", "success");
+            var message = document.getElementById("messages");
+            message.style.display = "none";
+            if (message.innerText = "success") {
+                Swal.fire("Success!", "Poll created", "success");
+            }
+        }   
+    </script>
+
+    <script type="text/javascript">
+        function addChoice() {
+            var choices = document.getElementById("choices-section");
+            var choices_input_values = [];
+            for (i = 0; i < choices.children.length; i++) {
+                choices_input_values.push(choices.children[i].children[0].children[0].children[1].value);
+            }
+            choices.innerHTML +=  `<div class="row" id="choice_${document.getElementById("choices-section").children.length+1}"><div class="form-group col-sm-12 text-center d-flex justify-content-center"><div class="input-group mb-3"><div class="input-group-prepend"><span class="input-group-text" id="inputGroup-sizing-default">Choice ${document.getElementById("choices-section").children.length+1}</span></div><input name="choice_${document.getElementById("choices-section").children.length+1}" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default"><div id="1" style="cursor: pointer; :hover { background-color: #ccc;}" class="text-center p-1 px-2 ml-2" onclick="deleteChoice(this.parentNode.parentNode.parentNode.id)"><i class="fa fa-trash pb-0 align-middle" style="font-size: 20px"></i></div></div></div></div>`;
+            for (i = 0; i < choices.children.length; i++) {
+                if (choices_input_values[i]) choices.children[i].children[0].children[0].children[1].value = choices_input_values[i];
+            }
+        }  
+
+        function deleteChoice(id) {
+            var elem = document.getElementById(id);
+            new Promise((resolve, reject) => {
+                console.log("Inside promise");
+                try {
+                    resolve(elem.parentNode.removeChild(elem));
+                } catch(err) {
+                    reject(err);
+                }
+                return; 
+            }).then(() => sortChoices());
+        }
+
+        function sortChoices() {
+            var choices = document.getElementById("choices-section");
+            for (i = 0; i < choices.children.length; i++) {
+                choices.children[i].id = `choice_${i+1}`;
+                choices.children[i].children[0].children[0].children[0].children[0].innerText = `choice ${i+1}`;
+            }
+        }
+    </script>
+
+{% endblock %}

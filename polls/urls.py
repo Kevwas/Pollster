@@ -24,7 +24,8 @@ urlpatterns = [
     path('dashboard/', views.DashboardView.as_view(), name='dashboard'),
 
     path('polls/<int:question_id>/vote/', views.vote, name='vote'),
-    path('resultsData/<str:obj>/', views.resultsData, name='resultsData'),
+    path('results-data/<str:obj>/', views.resultsData, name='resultsData'),
+    path('create-poll/', views.CreatePollView, name='createPoll'),
     
     path('', views.index, name='index'),
 ]

@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 
 class Question(models.Model):
     creator = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True, blank=True)
-    question_text = models.CharField(max_length=200)
+    question_text = models.CharField(max_length=200, unique=True)
     pub_date = models.DateTimeField('date published')
     description_text = models.TextField('brief description')
     multiple_choice = models.BooleanField(default=0)
