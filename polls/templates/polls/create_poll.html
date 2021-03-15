@@ -18,7 +18,7 @@
             color: #495057;
         }
     </style>
-    <div class="container bootstrap snippet bg-light card p-5 my-5" style="width: 80%;">
+    <div class="container bootstrap snippet bg-light card p-3 py-5 my-5" style="width: 100%;">
         {% for message in messages %}
             {% if message.tags == "success" %} 
                 <p id="messages" class="text-success lead">
@@ -54,7 +54,7 @@
             <hr>
 
             <div class="input-group mb-3">
-                <span class="input-group-text" style="white-space: wrap;">Allow multiple choices selection
+                <span class="input-group-text" style="white-space: wrap;">Multiple choice
                     <input class="ml-3" type="checkbox" aria-label="Checkbox for following text input">
                 </span>
             </div>
@@ -120,9 +120,9 @@
                 </div>
             </div>
             <div class="p-2 pl-2 mb-4" style="background-color: #e9ecef; border: 1px solid rgba(0,0,0,.125); border-radius: .25rem;">
-                <div class="submit-row d-flex">
-                    <input class="btn btn-info ml-auto mr-3" type="submit" value="Save" class="default" name="_save">
-                    <input class="btn btn-info" type="submit" value="Save and add another" name="_addanother">
+                <div class="submit-row d-flex flex-wrap">
+                    <input class="btn btn-info ml-auto my-1 mr-3" type="submit" value="Save" class="default" name="_save">
+                    <input class="btn btn-info my-1" type="submit" value="Save and add another" name="_addanother">
                 </div>
             </div>
         </form>
