@@ -108,19 +108,24 @@ def vote(request, question_id):
             'error_message': "You have already done this poll.",
         })
     else:
+        choices = []
         try:
-            choices = []
-            # print(request.POST.getlist('choice'))
-            for choice in request.POST.getlist('choice'):
-                # print("Choice: " + choice)
-                choices.append(question.choice_set.get(pk=choice))
+            if len(request.POST.getlist('choice')) <= 0:
+                return render(request, 'polls/detail.html', {
+                    'question': question,
+                    'error_message': "You didn't select a choice.",
+                })
+            else:
+                for choice in request.POST.getlist('choice'):
+                    # print("Choice: " + choice)
+                    choices.append(question.choice_set.get(pk=choice))
         except (KeyError, Choice.DoesNotExist):
             # Redisplay the question voting form
             return render(request, 'polls/detail.html', {
                 'question': question,
                 'error_message': "You didn't select a choice.",
             })
-        else:
+        else: 
             for choice in choices:
                 choice.votes = F('votes') + 1
                 choice.save()
